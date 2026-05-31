@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#4338CA" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <title>data-analysis-lab · visual statistical inference</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+            onload="renderMathInElement(document.body, { delimiters: [{left:'$$', right:'$$', display:true},{left:'$', right:'$', display:false}], ignoredTags: ['option','script','textarea'] })"></script>
+
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="title">
+        <span class="dot"></span><strong>data-analysis-lab</strong>
+        <span class="sub">sampling · estimation · intervals · testing · ANOVA · categorical</span>
+      </div>
+      <nav>
+        <a href="#clt">CLT</a>
+        <a href="#mle">MLE</a>
+        <a href="#mom">MoM vs MLE</a>
+        <a href="#cov">CI coverage</a>
+        <a href="#ciw">CI width</a>
+        <a href="#onez">one-sample</a>
+        <a href="#pval">p-value</a>
+        <a href="#power">power</a>
+        <a href="#twot">two-sample</a>
+        <a href="#paired">paired</a>
+        <a href="#anova">ANOVA</a>
+        <a href="#chi">chi-square</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- 1. CLT — Topic 1 (Sampling distributions) -------------------- -->
+      <section class="demo" id="clt">
+        <h2>1. Sampling distribution of the mean &amp; the CLT</h2>
+        <p class="cap">Draw repeated samples of size $n$ from a chosen population and pile up each sample mean
+          $\bar X$. The histogram of means is the <em>sampling distribution</em>; it becomes ever more Normal and
+          narrows with standard error $\mathrm{SE}=\sigma/\sqrt{n}$, regardless of the population shape (the CLT).</p>
+        <div class="row">
+          <div class="canvas-wrap"><canvas id="cv-clt" width="600" height="320"></canvas></div>
+          <div class="ctrls">
+            <label>population
+              <select id="clt-pop">
+                <option value="uniform">uniform</option>
+                <option value="exp" selected>exponential (skewed)</option>
+                <option value="bimodal">bimodal</option>
+                <option value="normal">normal</option>
+              </select>
+            </label>
+            <label>sample size $n$ <span class="mono" id="clt-nv">10</span>
+              <input id="clt-n" type="range" min="1" max="60" step="1" value="10"/></label>
+            <div class="readout"><span>population $\mu,\sigma$</span><strong id="clt-pop-ms" class="mono">—</strong></div>
+            <div class="readout"><span>theory SE $=\sigma/\sqrt n$</span><strong id="clt-se" class="mono">—</strong></div>
+            <div class="readout"><span>means drawn</span><strong id="clt-cnt" class="mono">0</strong></div>
+            <div class="readout"><span>observed mean of $\bar X$</span><strong id="clt-obsm" class="mono">—</strong></div>
+            <div class="readout"><span>observed SD of $\bar X$</span><strong id="clt-obss" class="mono big">—</strong></div>
+            <div class="btn-row">
+              <button id="clt-draw1" class="btn">+1 sample</button>
+              <button id="clt-draw100" class="btn">+200</button>
+              <button id="clt-reset" class="btn ghost">reset</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. MLE — Topic 2 (Point Estimation) -------------------------- -->
+      <section class="demo" id="mle">
+        <h2>2. Maximum likelihood estimation</h2>
+        <p class="cap">For a fixed sample, slide the parameter and watch the log-likelihood
+          $\ell(\theta)=\sum_i \log f(x_i;\theta)$. The maximiser is the MLE $\hat\theta$.
+          For the exponential, $\hat\lambda=1/\bar x$; for the Normal mean, $\hat\mu=\bar x$.</p>
+        <div class="row">
+          <div class="canvas-wrap"><canvas id="cv-mle" width="600" height="320"></canvas></div>
+          <div class="ctrls">
+            <label>model
+              <select id="mle-model">
+                <option value="exp" selected>exponential rate $\lambda$</option>
+                <option value="normmu">normal mean $\mu$ ($\sigma$ known)</option>
+              </select>
+            </label>
+            <label>parameter guess <span class="mono" id="mle-pv">1.00</span>
+              <input id="mle-p" type="range" min="1" max="100" step="1" value="50"/></label>
+            <label>sample size $n$ <span class="mono" id="mle-nv">40</span>
+              <input id="mle-n" type="range" min="5" max="200" step="5" value="40"/></label>
+            <div class="readout"><span>analytic MLE $\hat\theta$</span><strong id="mle-hat" class="mono big">—</strong></div>
+            <div class="readout"><span>$\ell$ at your guess</span><strong id="mle-ll" class="mono">—</strong></div>
+            <button id="mle-resample" class="btn">new sample</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. MoM vs MLE — Topic 2 -------------------------------------- -->
+      <section class="demo" id="mom">
+        <h2>3. Method of moments vs. MLE</h2>
+        <p class="cap">Two estimators on the <em>same</em> sample. The method of moments equates sample moments to
+          population moments; the MLE maximises the likelihood. Repeatedly resample to compare their sampling
+          spread — for the Gamma shape they differ, for the exponential rate they coincide ($1/\bar x$).</p>
+        <div class="row">
+          <div class="canvas-wrap"><canvas id="cv-mom" width="600" height="320"></canvas></div>
+          <div class="ctrls">
+            <label>true model
+              <select id="mom-model">
+                <option value="gamma" selected>Gamma (shape k)</option>
+                <option value="exp">exponential (rate λ)</option>
+              </select>
+            </label>
+            <label>sample size $n$ <span class="mono" id="mom-nv">30</span>
+              <input id="mom-n" type="range" min="5" max="200" step="5" value="30"/></label>
+            <div class="readout"><span>true parameter</span><strong id="mom-true" class="mono">—</strong></div>
+            <div class="readout"><span>MoM estimate</span><strong id="mom-mom" class="mono">—</strong></div>
+            <div class="readout"><span>MLE estimate</span><strong id="mom-mle" class="mono">—</strong></div>
+            <div class="readout"><span>MoM RMSE (rep.)</span><strong id="mom-rmm" class="mono">—</strong></div>
+            <div class="readout"><span>MLE RMSE (rep.)</span><strong id="mom-rml" class="mono big">—</strong></div>
+            <div class="btn-row">
+              <button id="mom-resample" class="btn">new sample</button>
+              <button id="mom-run" class="btn ghost">run 300 reps</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. CI coverage — Topic 3 ------------------------------------- -->
+      <section class="demo" id="cov">
+        <h2>4. Confidence-interval coverage</h2>
+        <p class="cap">Each horizontal bar is a 95% CI $\bar x \pm t_{0.025,n-1}\,s/\sqrt n$ from one fresh sample.
+          Bars that miss the true mean $\mu$ are drawn in red. Over many samples the covered fraction approaches the
+          stated confidence level — the meaning of &ldquo;95% confident&rdquo;.</p>
+        <div class="row">
+          <div class="canvas-wrap"><canvas id="cv-cov" width="600" height="340"></canvas></div>
+          <div class="ctrls">
+            <label>confidence level <span class="mono" id="cov-cv">95%</span>
+              <input id="cov-c" type="range" min="80" max="99" step="1" value="95"/></label>
+            <label>sample size $n$ <span class="mono" id="cov-nv">15</span>
+              <input id="cov-n" type="range" min="2" max="60" step="1" value="15"/></label>
+            <div class="readout"><span>intervals drawn</span><strong id="cov-tot" class="mono">0</strong></div>
+            <div class="readout"><span>covered</span><strong id="cov-hit" class="mono">0</strong></div>
+            <div class="readout"><span>observed coverage</span><strong id="cov-rate" class="mono big">—</strong></div>
+            <div class="btn-row">
+              <button id="cov-1" class="btn">+1</button>
+              <button id="cov-50" class="btn">+50</button>
+              <button id="cov-reset" class="btn ghost">reset</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. CI width — Topic 3 ---------------------------------------- -->
+      <section class="demo" id="ciw">
+        <h2>5. CI width vs. sample size &amp; confidence</h2>
+        <p class="cap">The half-width of a mean CI is $t_{\alpha/2,\,n-1}\,s/\sqrt n$. It shrinks like $1/\sqrt n$
+          (quadrupling $n$ halves the width) and grows as you demand more confidence. The curve plots half-width
+          against $n$ for the chosen level.</p>
+        <div class="row">
+          <div class="canvas-wrap"><canvas id="cv-ciw" width="600" height="320"></canvas></div>
+          <div class="ctrls">
+            <label>confidence level <span class="mono" id="ciw-cv">95%</span>
+              <input id="ciw-c" type="range" min="80" max="99" step="1" value="95"/></label>
+            <label>sample SD $s$ <span class="mono" id="ciw-sv">1.0</span>
+              <input id="ciw-s" type="range" min="5" max="50" step="1" value="10"/></label>
+            <label>highlight $n$ <span class="mono" id="ciw-nv">20</span>
+              <input id="ciw-n" type="range" min="2" max="120" step="1" value="20"/></label>
+            <div class="readout"><span>$t_{\alpha/2,n-1}$</span><strong id="ciw-t" class="mono">—</strong></div>
+            <div class="readout"><span>half-width at $n$</span><strong id="ciw-hw" class="mono big">—</strong></div>
+            <div class="readout"><span>$n$ to halve it</span><strong id="ciw-quad" class="mono">—</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. One-sample test — Topic 4 --------------------------------- -->
+      <section class="demo" id="onez">
+        <h2>6. One-sample z / t test</h2>
+        <p class="cap">Test $H_0:\mu=\mu_0$. The statistic is $z=\dfrac{\bar x-\mu_0}{\sigma/\sqrt n}$ (known $\sigma$)
+          or $t=\dfrac{\bar x-\mu_0}{s/\sqrt n}$ (estimated). The shaded rejection region holds the most extreme
+          $\alpha$ of the null distribution; reject when the statistic lands inside it.</p>
+        <div class="row">
+          <div class="canvas-wrap"><canvas id="cv-onez" width="600" height="300"></canvas></div>
+          <div class="ctrls">
+            <label>test type
+              <select id="oz-type">
+                <option value="z" selected>z-test (σ known)</option>
+                <option value="t">t-test (s estimated)</option>
+              </select>
+            </label>
+            <label>alternative
+              <select id="oz-alt">
+                <option value="two" selected>two-sided ≠</option>
+                <option value="gt">right &gt;</option>
+                <option value="lt">left &lt;</option>
+              </select>
+            </label>
+            <label>$\bar x - \mu_0$ <span class="mono" id="oz-dv">0.6</span>
+              <input id="oz-d" type="range" min="-30" max="30" step="1" value="6"/></label>
+            <label>$s$ (or $\sigma$) <span class="mono" id="oz-sv">1.0</span>
+              <input id="oz-s" type="range" min="2" max="40" step="1" value="10"/></label>
+            <label>sample size $n$ <span class="mono" id="oz-nv">25</span>
+              <input id="oz-n" type="range" min="2" max="80" step="1" value="25"/></label>
+            <label>$\alpha$ <span class="mono" id="oz-av">0.05</span>
+              <input id="oz-a" type="range" min="1" max="20" step="1" value="5"/></label>
+            <div class="readout"><span>statistic</span><strong id="oz-stat" class="mono">—</strong></div>
+            <div class="readout"><span>critical value</span><strong id="oz-crit" class="mono">—</strong></div>
+            <div class="readout"><span>p-value</span><strong id="oz-p" class="mono">—</strong></div>
+            <div class="readout"><span>decision</span><strong id="oz-dec" class="mono big">—</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. p-value — Topic 4 ----------------------------------------- -->
+      <section class="demo" id="pval">
+        <h2>7. The p-value as a tail area</h2>
+        <p class="cap">Given an observed test statistic on the standard Normal null, the p-value is the probability of
+          a result at least as extreme. Drag the statistic and the alternative; the shaded area <em>is</em> the
+          p-value. Small tail area ⟹ the data are surprising under $H_0$.</p>
+        <div class="row">
+          <div class="canvas-wrap"><canvas id="cv-pval" width="600" height="300"></canvas></div>
+          <div class="ctrls">
+            <label>alternative
+              <select id="pv-alt">
+                <option value="two" selected>two-sided</option>
+                <option value="gt">right tail</option>
+                <option value="lt">left tail</option>
+              </select>
+            </label>
+            <label>observed $z$ <span class="mono" id="pv-zv">1.96</span>
+              <input id="pv-z" type="range" min="-400" max="400" step="1" value="196"/></label>
+            <div class="readout"><span>tail area (p)</span><strong id="pv-p" class="mono big">—</strong></div>
+            <div class="readout"><span>vs α = 0.05</span><strong id="pv-sig" class="mono">—</strong></div>
+            <div class="readout"><span>vs α = 0.01</span><strong id="pv-sig1" class="mono">—</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Power — Topic 4 ------------------------------------------- -->
+      <section class="demo" id="power">
+        <h2>8. Type I / II error &amp; statistical power</h2>
+        <p class="cap">Two distributions of $\bar X$: under $H_0$ (centre $\mu_0$) and under $H_1$ (centre $\mu_0+\delta$).
+          The critical line splits them. Right of it under $H_0$ is $\alpha$ (Type I); left of it under $H_1$ is
+          $\beta$ (Type II); power $=1-\beta$ is the rest. Move effect size, $n$ and $\alpha$ to grow the power.</p>
+        <div class="row">
+          <div class="canvas-wrap"><canvas id="cv-power" width="600" height="300"></canvas></div>
+          <div class="ctrls">
+            <label>effect size $\delta/\sigma$ <span class="mono" id="pw-dv">0.5</span>
+              <input id="pw-d" type="range" min="0" max="20" step="1" value="5"/></label>
+            <label>sample size $n$ <span class="mono" id="pw-nv">25</span>
+              <input id="pw-n" type="range" min="2" max="120" step="1" value="25"/></label>
+            <label>$\alpha$ <span class="mono" id="pw-av">0.05</span>
+              <input id="pw-a" type="range" min="1" max="20" step="1" value="5"/></label>
+            <label class="check"><input id="pw-two" type="checkbox"/> two-sided</label>
+            <div class="readout"><span>$\alpha$ (Type I)</span><strong id="pw-alpha" class="mono">—</strong></div>
+            <div class="readout"><span>$\beta$ (Type II)</span><strong id="pw-beta" class="mono">—</strong></div>
+            <div class="readout"><span>power $1-\beta$</span><strong id="pw-power" class="mono big">—</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. Two-sample — Topic 5 -------------------------------------- -->
+      <section class="demo" id="twot">
+        <h2>9. Two-sample t-test (pooled vs. Welch)</h2>
+        <p class="cap">Compare two group means. The pooled t assumes equal variances; Welch's t does not and adjusts the
+          degrees of freedom (Satterthwaite). When variances or sizes differ, the two disagree — Welch is the safer
+          default. Edit each group's mean, SD and size.</p>
+        <div class="row">
+          <div class="canvas-wrap"><canvas id="cv-twot" width="600" height="300"></canvas></div>
+          <div class="ctrls">
+            <label>group A: mean <span class="mono" id="t2-ma-v">50</span>
+              <input id="t2-ma" type="range" min="0" max="100" step="1" value="50"/></label>
+            <label>group A: SD <span class="mono" id="t2-sa-v">10</span>
+              <input id="t2-sa" type="range" min="2" max="40" step="1" value="10"/></label>
+            <label>group A: n <span class="mono" id="t2-na-v">20</span>
+              <input id="t2-na" type="range" min="2" max="80" step="1" value="20"/></label>
+            <label>group B: mean <span class="mono" id="t2-mb-v">56</span>
+              <input id="t2-mb" type="range" min="0" max="100" step="1" value="56"/></label>
+            <label>group B: SD <span class="mono" id="t2-sb-v">14</span>
+              <input id="t2-sb" type="range" min="2" max="40" step="1" value="14"/></label>
+            <label>group B: n <span class="mono" id="t2-nb-v">20</span>
+              <input id="t2-nb" type="range" min="2" max="80" step="1" value="20"/></label>
+            <div class="readout"><span>pooled t (df)</span><strong id="t2-pool" class="mono">—</strong></div>
+            <div class="readout"><span>Welch t (df)</span><strong id="t2-welch" class="mono">—</strong></div>
+            <div class="readout"><span>Welch p (two-sided)</span><strong id="t2-p" class="mono big">—</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. Paired vs unpaired — Topic 5 ----------------------------- -->
+      <section class="demo" id="paired">
+        <h2>10. Paired vs. unpaired analysis</h2>
+        <p class="cap">The same before/after data, two ways. Pairing analyses the within-subject differences $d_i$,
+          removing between-subject variation; the unpaired test ignores the pairing. When subjects vary a lot but the
+          change is consistent, pairing shrinks the standard error and lifts the t statistic.</p>
+        <div class="row">
+          <div class="canvas-wrap"><canvas id="cv-paired" width="600" height="320"></canvas></div>
+          <div class="ctrls">
+            <label>true shift (after − before) <span class="mono" id="pd-dv">3.0</span>
+              <input id="pd-d" type="range" min="-50" max="50" step="1" value="30"/></label>
+            <label>between-subject spread <span class="mono" id="pd-bv">12</span>
+              <input id="pd-b" type="range" min="0" max="40" step="1" value="12"/></label>
+            <label>within-pair noise <span class="mono" id="pd-wv">4</span>
+              <input id="pd-w" type="range" min="1" max="30" step="1" value="4"/></label>
+            <label>pairs $n$ <span class="mono" id="pd-nv">15</span>
+              <input id="pd-n" type="range" min="3" max="40" step="1" value="15"/></label>
+            <div class="readout"><span>paired t</span><strong id="pd-pt" class="mono">—</strong></div>
+            <div class="readout"><span>paired p</span><strong id="pd-pp" class="mono">—</strong></div>
+            <div class="readout"><span>unpaired t</span><strong id="pd-ut" class="mono">—</strong></div>
+            <div class="readout"><span>unpaired p</span><strong id="pd-up" class="mono big">—</strong></div>
+            <button id="pd-resample" class="btn">new data</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11. ANOVA — Topic 6 ------------------------------------------ -->
+      <section class="demo" id="anova">
+        <h2>11. One-way ANOVA — F = between / within</h2>
+        <p class="cap">Several groups. ANOVA splits total variation into <em>between-group</em> (MSB) and
+          <em>within-group</em> (MSE) parts; the ratio $F=\mathrm{MSB}/\mathrm{MSE}$ is large when group means are spread
+          far relative to the noise. Move the group means apart or raise the noise and watch $F$ and its p-value react.</p>
+        <div class="row">
+          <div class="canvas-wrap"><canvas id="cv-anova" width="600" height="320"></canvas></div>
+          <div class="ctrls">
+            <label>groups $k$ <span class="mono" id="av-kv">3</span>
+              <input id="av-k" type="range" min="2" max="6" step="1" value="3"/></label>
+            <label>per-group size $n$ <span class="mono" id="av-nv">12</span>
+              <input id="av-n" type="range" min="3" max="40" step="1" value="12"/></label>
+            <label>mean spread <span class="mono" id="av-spv">6</span>
+              <input id="av-sp" type="range" min="0" max="40" step="1" value="6"/></label>
+            <label>within noise <span class="mono" id="av-wv">8</span>
+              <input id="av-w" type="range" min="1" max="40" step="1" value="8"/></label>
+            <div class="readout"><span>df (between, within)</span><strong id="av-df" class="mono">—</strong></div>
+            <div class="readout"><span>MSB / MSE</span><strong id="av-ms" class="mono">—</strong></div>
+            <div class="readout"><span>F statistic</span><strong id="av-f" class="mono big">—</strong></div>
+            <div class="readout"><span>p-value</span><strong id="av-p" class="mono">—</strong></div>
+            <button id="av-resample" class="btn">new data</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12. Chi-square — categorical data ---------------------------- -->
+      <section class="demo" id="chi">
+        <h2>12. Chi-square test of independence</h2>
+        <p class="cap">A contingency table of observed counts $O_{ij}$. Under independence the expected count is
+          $E_{ij}=\dfrac{R_i\,C_j}{N}$, and $\chi^2=\sum\dfrac{(O-E)^2}{E}$ with $(r-1)(c-1)$ degrees of freedom.
+          Edit the cells; the expected table, contributions and p-value update live.</p>
+        <div class="row">
+          <div class="canvas-wrap"><canvas id="cv-chi" width="600" height="300"></canvas></div>
+          <div class="ctrls">
+            <div id="chi-table"></div>
+            <div class="readout"><span>χ² statistic</span><strong id="chi-stat" class="mono big">—</strong></div>
+            <div class="readout"><span>df</span><strong id="chi-df" class="mono">—</strong></div>
+            <div class="readout"><span>p-value</span><strong id="chi-p" class="mono">—</strong></div>
+            <div class="readout"><span>at α = 0.05</span><strong id="chi-dec" class="mono">—</strong></div>
+            <div class="btn-row">
+              <button id="chi-indep" class="btn ghost">independent example</button>
+              <button id="chi-assoc" class="btn ghost">associated example</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>data-analysis-lab — Andrea Montana · IE BCSAI</span>
+      <span class="more">
+        <a href="https://github.com/andreaisabelmontana/discrete-math-lab" target="_blank">discrete-math-lab</a>
+        <a href="https://github.com/andreaisabelmontana/prob-stats-lab" target="_blank">prob-stats-lab</a>
+        <a href="https://github.com/andreaisabelmontana/business-lab" target="_blank">business-lab</a>
+        <a href="https://github.com/andreaisabelmontana/research-methods-lab" target="_blank">research-methods-lab</a>
+        <a href="https://github.com/andreaisabelmontana/big-history-lab" target="_blank">big-history-lab</a>
+        <a href="https://github.com/andreaisabelmontana/data-analysis-lab" target="_blank">source</a>
+      </span>
+    </footer>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
