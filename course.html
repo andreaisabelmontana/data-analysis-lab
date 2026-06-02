@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#4338CA" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <title>Fundamentals of Data Analysis · course outline</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="./style.css" />
+
+    <style>
+      /* course.html — scoped layout reusing the *-lab :root tokens */
+      .lead { color: var(--ink-soft); font-size: 0.92rem; max-width: 64ch; margin: 0 0 1rem; }
+
+      /* meta grid */
+      .meta {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.6rem; margin-top: 0.4rem;
+      }
+      .meta .cell {
+        border: 1px solid var(--rule); border-radius: 6px;
+        padding: 0.5rem 0.65rem; background: var(--bg);
+      }
+      .meta .cell .k { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; }
+      .meta .cell .v { color: var(--ink); font-weight: 700; font-size: 0.9rem; margin-top: 0.15rem; }
+      .meta .cell .v.mono { font-family: var(--font-mono); }
+
+      /* objective / list cards */
+      ul.obj, ul.skills { list-style: none; padding: 0; margin: 0.4rem 0 0; display: grid; gap: 0.4rem; }
+      ul.obj li, ul.skills li {
+        position: relative; padding: 0.4rem 0.6rem 0.4rem 1.6rem;
+        border: 1px solid var(--rule); border-radius: 6px; background: var(--bg);
+        font-size: 0.86rem; color: var(--ink-soft);
+      }
+      ul.obj li::before, ul.skills li::before {
+        content: ''; position: absolute; left: 0.6rem; top: 0.78rem;
+        width: 7px; height: 7px; border-radius: 2px; background: var(--accent);
+      }
+      ul.skills li::before { border-radius: 999px; background: var(--good); }
+
+      /* weighting / assessment bars */
+      .bars { display: grid; gap: 0.55rem; margin-top: 0.4rem; }
+      .bar-row { display: grid; grid-template-columns: 200px 1fr 56px; align-items: center; gap: 0.6rem; font-size: 0.83rem; }
+      .bar-row .lbl { color: var(--ink-soft); font-weight: 500; }
+      .bar-track { background: var(--rule); border-radius: 999px; height: 9px; overflow: hidden; }
+      .bar-fill { height: 100%; background: var(--accent); border-radius: 999px; }
+      .bar-fill.alt { background: var(--good); }
+      .bar-row .pct { font-family: var(--font-mono); font-weight: 600; color: var(--ink); text-align: right; }
+      @media (max-width: 640px) { .bar-row { grid-template-columns: 120px 1fr 48px; } }
+
+      .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+      @media (max-width: 760px) { .twocol { grid-template-columns: 1fr; } }
+      .subhead { font-size: 0.82rem; font-weight: 700; color: var(--ink); margin: 0 0 0.35rem; }
+
+      /* module + timeline */
+      .module { margin-top: 1.1rem; }
+      .module:first-of-type { margin-top: 0.4rem; }
+      .module-head {
+        display: flex; align-items: baseline; gap: 0.55rem; flex-wrap: wrap;
+        padding-bottom: 0.4rem; border-bottom: 1px solid var(--rule-h); margin-bottom: 0.7rem;
+      }
+      .module-head .mtag {
+        font-family: var(--font-mono); font-size: 0.7rem; font-weight: 600;
+        color: var(--accent); background: var(--accent-soft);
+        padding: 0.12em 0.5em; border-radius: 999px;
+      }
+      .module-head .mtitle { font-weight: 700; font-size: 0.95rem; color: var(--ink); }
+      .module-head .mmeta { color: var(--muted); font-size: 0.76rem; }
+
+      .timeline { display: grid; gap: 0.55rem; border-left: 2px solid var(--rule); padding-left: 1rem; margin-left: 0.35rem; }
+      .sess {
+        position: relative; border: 1px solid var(--rule); border-radius: 8px;
+        padding: 0.6rem 0.8rem; background: var(--paper);
+      }
+      .sess::before {
+        content: ''; position: absolute; left: -1.27rem; top: 0.95rem;
+        width: 9px; height: 9px; border-radius: 999px; background: var(--accent);
+        border: 2px solid var(--paper); box-shadow: 0 0 0 1px var(--rule-h);
+      }
+      .sess.practice::before { background: var(--good); }
+      .sess.exam::before { background: var(--warn); }
+      .sess-head { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+      .sess-num {
+        font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;
+        color: var(--muted); min-width: 2.4em;
+      }
+      .sess-kind {
+        font-family: var(--font-mono); font-size: 0.64rem; font-weight: 600;
+        text-transform: uppercase; letter-spacing: 0.05em;
+        padding: 0.08em 0.45em; border-radius: 999px;
+        color: var(--accent); border: 1px solid var(--accent); background: var(--accent-soft);
+      }
+      .sess-kind.practice { color: var(--good); border-color: var(--good); background: rgba(22,163,74,0.10); }
+      .sess-kind.exam { color: var(--warn); border-color: var(--warn); background: rgba(245,158,11,0.12); }
+      .sess-title { font-weight: 700; font-size: 0.87rem; color: var(--ink); }
+      .sess-obj { color: var(--ink-soft); font-size: 0.82rem; margin: 0.4rem 0 0.35rem; }
+      .sess ul.topics { list-style: none; padding: 0; margin: 0.25rem 0 0; display: flex; flex-wrap: wrap; gap: 0.3rem 0.6rem; }
+      .sess ul.topics li {
+        position: relative; padding-left: 0.85rem; color: var(--ink-soft); font-size: 0.79rem;
+      }
+      .sess ul.topics li::before {
+        content: '·'; position: absolute; left: 0.15rem; color: var(--accent); font-weight: 700;
+      }
+      .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.5rem; }
+      .tag {
+        font-family: var(--font-mono); font-size: 0.68rem;
+        color: var(--ink-soft); background: var(--bg);
+        border: 1px solid var(--rule); border-radius: 999px; padding: 0.1em 0.55em;
+      }
+      .tag.demo-link { color: var(--accent); border-color: var(--accent); }
+      .tag.demo-link:hover { background: var(--accent-soft); }
+      .tag.read { color: var(--muted); }
+
+      .legend { display: flex; gap: 1rem; flex-wrap: wrap; margin: 0.2rem 0 0.6rem; font-size: 0.76rem; color: var(--muted); }
+      .legend .swatch { display: inline-block; width: 9px; height: 9px; border-radius: 999px; margin-right: 0.35em; transform: translateY(0px); }
+      .sw-theory { background: var(--accent); }
+      .sw-practice { background: var(--good); }
+      .sw-exam { background: var(--warn); }
+
+      .note {
+        font-size: 0.8rem; color: var(--ink-soft); background: var(--bg);
+        border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+        border-radius: 6px; padding: 0.55rem 0.75rem; margin-top: 0.6rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="title">
+        <span class="dot"></span><strong>Fundamentals of Data Analysis</strong>
+        <span class="sub">course outline · BCSAI · IE University</span>
+      </div>
+      <nav>
+        <a href="./index.html">← interactive demos</a>
+        <a href="#overview">overview</a>
+        <a href="#objectives">objectives</a>
+        <a href="#method">methodology</a>
+        <a href="#assessment">assessment</a>
+        <a href="#program">program</a>
+        <a href="./SYLLABUS.pdf" target="_blank">syllabus PDF</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- (a) OVERVIEW + META -->
+      <section class="demo" id="overview">
+        <h2>Course overview</h2>
+        <p class="cap">FDA-N-CSAI.1.M.A — a basic Mathematics-area course in the Bachelor in Computer Science and
+          Artificial Intelligence (BCSAI). It introduces probability models and statistical methods for analysing data:
+          students learn to make inferences from statistics (functions of observed data), build confidence intervals,
+          test hypotheses with one and two samples, run analysis of variance with one or more factors, and handle
+          categorical data — using Python throughout.</p>
+        <p class="lead">The use of probability models and statistical methods for analysing data is common practice in
+          virtually all scientific disciplines. Data analysis teaches us to make intelligent judgments and informed
+          decisions in the presence of uncertainty and variation. This course is the foundation for later subjects such
+          as Algorithms and Data Structures, Probability for Computer Science, and AI: Statistical Learning and
+          Prediction.</p>
+        <div class="meta">
+          <div class="cell"><div class="k">Program</div><div class="v">BCSAI (SEP-2025)</div></div>
+          <div class="cell"><div class="k">Course code</div><div class="v mono">FDA-N-CSAI.1.M.A</div></div>
+          <div class="cell"><div class="k">Area</div><div class="v">Mathematics</div></div>
+          <div class="cell"><div class="k">Category</div><div class="v">Basic</div></div>
+          <div class="cell"><div class="k">Credits</div><div class="v mono">6.0 ECTS</div></div>
+          <div class="cell"><div class="k">Sessions</div><div class="v mono">30</div></div>
+          <div class="cell"><div class="k">Year / course</div><div class="v">First · 25–26</div></div>
+          <div class="cell"><div class="k">Semester</div><div class="v">2nd</div></div>
+          <div class="cell"><div class="k">Language</div><div class="v">English</div></div>
+          <div class="cell"><div class="k">Workload</div><div class="v mono">150 h</div></div>
+          <div class="cell"><div class="k">Professor</div><div class="v">Simón Isaza</div></div>
+          <div class="cell"><div class="k">Contact</div><div class="v">sisaza@faculty.ie.edu</div></div>
+        </div>
+        <p class="note"><strong>AI policy.</strong> The use of generative AI is not permitted in this course unless the
+          instructor states otherwise; GenAI tools would jeopardise the acquisition of the fundamental knowledge and
+          skills the course develops. AI-generated content in any assessment is treated as academic misconduct.</p>
+      </section>
+
+      <!-- (b) LEARNING OBJECTIVES -->
+      <section class="demo" id="objectives">
+        <h2>Learning objectives</h2>
+        <p class="cap">By the end of the course students should acquire the following competencies — and reinforce a set
+          of generic skills.</p>
+        <div class="twocol">
+          <div>
+            <p class="subhead">Subject competencies</p>
+            <ul class="obj">
+              <li>Analyse and synthesise the main information content of univariate and multivariate data.</li>
+              <li>Compute probabilities and understand key concepts related to hypothesis testing.</li>
+              <li>Use random variables to model real phenomena.</li>
+              <li>Perform inferences in one and two populations.</li>
+              <li>Test hypotheses about populations.</li>
+              <li>Design experiments and run analysis of variance.</li>
+              <li>Deal with categorical data.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="subhead">Generic skills</p>
+            <ul class="skills">
+              <li>The ability to think analytically.</li>
+              <li>The use of statistical software and a programming language, namely Python.</li>
+              <li>The ability to think critically.</li>
+            </ul>
+            <p class="note">The objective is to give students the tools to delve into data sets and use that
+              information across disciplines — computer science, engineering, physics, and more.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- (c) METHODOLOGY + ASSESSMENT -->
+      <section class="demo" id="method">
+        <h2>Teaching methodology</h2>
+        <p class="cap">IE University's method is collaborative, active and applied: students build their knowledge through
+          lectures, discussion, in-class exercises and Python field work, group work and individual study. Weighting of
+          learning activities (total 150 hours):</p>
+        <div class="bars">
+          <div class="bar-row"><span class="lbl">Lectures</span><span class="bar-track"><span class="bar-fill" style="width:30%"></span></span><span class="pct">30%</span></div>
+          <div class="bar-row"><span class="lbl">Exercises · async · field work</span><span class="bar-track"><span class="bar-fill" style="width:30%"></span></span><span class="pct">30%</span></div>
+          <div class="bar-row"><span class="lbl">Individual studying</span><span class="bar-track"><span class="bar-fill" style="width:30%"></span></span><span class="pct">30%</span></div>
+          <div class="bar-row"><span class="lbl">Group work</span><span class="bar-track"><span class="bar-fill" style="width:6.7%"></span></span><span class="pct">6.7%</span></div>
+          <div class="bar-row"><span class="lbl">Discussions</span><span class="bar-track"><span class="bar-fill" style="width:3.3%"></span></span><span class="pct">3.3%</span></div>
+        </div>
+      </section>
+
+      <section class="demo" id="assessment">
+        <h2>Evaluation criteria</h2>
+        <p class="cap">Ordinary evaluation combines the following criteria. <strong>A minimum grade of 3.5 in the final
+          exam is required to pass</strong> — below that the course is failed even if the weighted average exceeds 5.0.</p>
+        <div class="bars">
+          <div class="bar-row"><span class="lbl">Final exam</span><span class="bar-track"><span class="bar-fill alt" style="width:30%"></span></span><span class="pct">30%</span></div>
+          <div class="bar-row"><span class="lbl">Problem sets (×4)</span><span class="bar-track"><span class="bar-fill alt" style="width:20%"></span></span><span class="pct">20%</span></div>
+          <div class="bar-row"><span class="lbl">Midterm exam</span><span class="bar-track"><span class="bar-fill alt" style="width:20%"></span></span><span class="pct">20%</span></div>
+          <div class="bar-row"><span class="lbl">Computer exam (Python)</span><span class="bar-track"><span class="bar-fill alt" style="width:20%"></span></span><span class="pct">20%</span></div>
+          <div class="bar-row"><span class="lbl">Class participation</span><span class="bar-track"><span class="bar-fill alt" style="width:10%"></span></span><span class="pct">10%</span></div>
+        </div>
+        <p class="note"><strong>Exams.</strong> The midterm (session 20, tentative) is closed-book, one double-sided A4
+          formula sheet allowed. The computer exam (session 29) is an open-book individual Python exam covering all
+          topics. The final exam (session 30) is comprehensive and closed-book, two double-sided A4 formula sheets
+          allowed. Problem sets are four BlackBoard multiple-answer tests solved by hand and/or in Python. Re-sits in
+          June/July are comprehensive, cap at 8.0, and require physical presence on campus; the 80% attendance rule
+          applies.</p>
+      </section>
+
+      <!-- (d) PROGRAM -->
+      <section class="demo" id="program">
+        <h2>Program — 30 sessions</h2>
+        <p class="cap">The full session-by-session program, grouped into the two assessment modules. Theory sessions
+          introduce each topic; practice sessions are problem solving and Python labs. Where a topic has a live demo on
+          the <a href="./index.html">interactive lab</a>, the session links to it.</p>
+        <div class="legend">
+          <span><span class="swatch sw-theory"></span>theory</span>
+          <span><span class="swatch sw-practice"></span>practice / Python</span>
+          <span><span class="swatch sw-exam"></span>exam</span>
+        </div>
+
+        <!-- MODULE 1 -->
+        <div class="module">
+          <div class="module-head">
+            <span class="mtag">Module 1</span>
+            <span class="mtitle">Sampling, estimation, intervals &amp; one-sample testing</span>
+            <span class="mmeta">Topics 1–4 · sessions 1–20 · assessed in the midterm</span>
+          </div>
+          <div class="timeline">
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S1</span><span class="sess-kind">theory</span><span class="sess-title">Presentation &amp; Topic 1 — Sampling distributions</span></div>
+              <p class="sess-obj">Course presentation, then the behaviour of statistics computed from random samples and how a sampling distribution arises.</p>
+              <ul class="topics"><li>Statistics and their distributions</li><li>Random samples</li><li>Deriving a sampling distribution</li><li>Simulation experiments</li><li>Distribution of the sample mean</li><li>Central Limit Theorem</li><li>Distribution of a linear combination</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#clt">demo: CLT &amp; sampling distribution</a></div>
+            </div>
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S2</span><span class="sess-kind">theory</span><span class="sess-title">Topic 1 — Sampling distributions (cont.)</span></div>
+              <p class="sess-obj">Continue with the sample mean, the CLT and linear combinations; consolidate via simulation.</p>
+              <ul class="topics"><li>Distribution of the sample mean</li><li>Central Limit Theorem</li><li>Distribution of a linear combination</li></ul>
+              <div class="tags"><span class="tag read">Devore Ch. 5 §5.3–5.5</span><a class="tag demo-link" href="./index.html#clt">demo: CLT</a></div>
+            </div>
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S3</span><span class="sess-kind">theory</span><span class="sess-title">Topic 2 — Point estimation</span></div>
+              <p class="sess-obj">Use a sample to produce a single best-guess value (point estimate) for a population parameter.</p>
+              <ul class="topics"><li>General concepts of point estimation</li><li>Methods of point estimation</li><li>Method of moments</li><li>Maximum likelihood estimation</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#mle">demo: MLE</a></div>
+            </div>
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S4</span><span class="sess-kind">theory</span><span class="sess-title">Topic 2 — Point estimation (cont.)</span></div>
+              <p class="sess-obj">Develop the estimation methods and compare them.</p>
+              <ul class="topics"><li>Method of moments</li><li>Maximum likelihood estimation</li><li>Properties of estimators</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#mle">demo: MLE</a><a class="tag demo-link" href="./index.html#mom">demo: MoM vs MLE</a></div>
+            </div>
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S5</span><span class="sess-kind">theory</span><span class="sess-title">Topic 2 — Point estimation (cont.)</span></div>
+              <p class="sess-obj">Wrap up point estimation; contrast the sampling behaviour of competing estimators.</p>
+              <ul class="topics"><li>Method of moments</li><li>Maximum likelihood estimation</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#mom">demo: MoM vs MLE</a></div>
+            </div>
+
+            <div class="sess practice">
+              <div class="sess-head"><span class="sess-num">S6</span><span class="sess-kind practice">practice</span><span class="sess-title">Sampling distributions &amp; point estimation</span></div>
+              <p class="sess-obj">Problem solving across Topics 1 and 2.</p>
+              <ul class="topics"><li>Problem solving</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#clt">demo: CLT</a><a class="tag demo-link" href="./index.html#mom">demo: MoM vs MLE</a></div>
+            </div>
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S7</span><span class="sess-kind">theory</span><span class="sess-title">Topic 3 — Statistical intervals based on a single sample</span></div>
+              <p class="sess-obj">Report a range of plausible values — a confidence interval — to convey the precision of an estimate.</p>
+              <ul class="topics"><li>Basic properties of confidence intervals</li><li>Large-sample CIs for a mean &amp; proportion</li><li>Intervals based on a Normal population</li><li>CIs for variance &amp; standard deviation</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#cov">demo: CI coverage</a><a class="tag demo-link" href="./index.html#ciw">demo: CI width</a></div>
+            </div>
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S8</span><span class="sess-kind">theory</span><span class="sess-title">Topic 3 — Statistical intervals (cont.)</span></div>
+              <p class="sess-obj">Continue with confidence intervals for means, proportions and variances.</p>
+              <ul class="topics"><li>Large-sample CIs</li><li>Normal-based intervals</li><li>CIs for variance &amp; SD</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#cov">demo: CI coverage</a><a class="tag demo-link" href="./index.html#ciw">demo: CI width</a></div>
+            </div>
+
+            <div class="sess practice">
+              <div class="sess-head"><span class="sess-num">S9</span><span class="sess-kind practice">practice</span><span class="sess-title">Statistical intervals based on a single sample</span></div>
+              <p class="sess-obj">Problem solving on confidence intervals.</p>
+              <ul class="topics"><li>Problem solving</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#cov">demo: CI coverage</a></div>
+            </div>
+
+            <div class="sess practice">
+              <div class="sess-head"><span class="sess-num">S10</span><span class="sess-kind practice">practice</span><span class="sess-title">One-sample inference with Python</span></div>
+              <p class="sess-obj">Implement one-sample estimation and intervals in Python.</p>
+              <ul class="topics"><li>Python lab</li><li>One-sample inference</li></ul>
+              <div class="tags"><span class="tag read">Python</span><a class="tag demo-link" href="./index.html#ciw">demo: CI width</a></div>
+            </div>
+
+            <div class="sess practice">
+              <div class="sess-head"><span class="sess-num">S11</span><span class="sess-kind practice">practice</span><span class="sess-title">Problem Set 1</span></div>
+              <p class="sess-obj">Assessed problem set covering Topics 1–3 (BlackBoard multiple-answer test).</p>
+              <ul class="topics"><li>Problem Set 1</li></ul>
+              <div class="tags"><span class="tag read">assessed · 20% (with PS 2–4)</span></div>
+            </div>
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S12</span><span class="sess-kind">theory</span><span class="sess-title">Topic 4 — Tests of hypotheses based on a single sample</span></div>
+              <p class="sess-obj">Decide between two contradictory claims about a parameter — the core of hypothesis testing.</p>
+              <ul class="topics"><li>Hypotheses &amp; test procedures</li><li>z tests for a population mean</li><li>One-sample t test</li><li>Tests for a proportion</li><li>Tests for a variance</li><li>Further aspects of testing</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#onez">demo: one-sample z/t</a><a class="tag demo-link" href="./index.html#pval">demo: p-value</a><a class="tag demo-link" href="./index.html#power">demo: power</a></div>
+            </div>
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S13</span><span class="sess-kind">theory</span><span class="sess-title">Topic 4 — Tests of hypotheses (cont.)</span></div>
+              <p class="sess-obj">Continue with single-sample tests and the trade-offs between error types and power.</p>
+              <ul class="topics"><li>z and t tests</li><li>Tests for proportion &amp; variance</li><li>Type I/II error &amp; power</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#pval">demo: p-value</a><a class="tag demo-link" href="./index.html#power">demo: power</a></div>
+            </div>
+
+            <div class="sess practice">
+              <div class="sess-head"><span class="sess-num">S14</span><span class="sess-kind practice">practice</span><span class="sess-title">Tests of hypotheses based on a single sample</span></div>
+              <p class="sess-obj">Problem solving on one-sample hypothesis tests.</p>
+              <ul class="topics"><li>Problem solving</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#onez">demo: one-sample z/t</a></div>
+            </div>
+
+            <div class="sess practice">
+              <div class="sess-head"><span class="sess-num">S15</span><span class="sess-kind practice">practice</span><span class="sess-title">Hypothesis testing with Python — one sample</span></div>
+              <p class="sess-obj">Run one-sample hypothesis tests in Python.</p>
+              <ul class="topics"><li>Python lab</li><li>One-sample hypothesis testing</li></ul>
+              <div class="tags"><span class="tag read">Python</span><a class="tag demo-link" href="./index.html#onez">demo: one-sample z/t</a></div>
+            </div>
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S16</span><span class="sess-kind">theory</span><span class="sess-title">Topic 5 — Inferences based on two samples</span></div>
+              <p class="sess-obj">Confidence intervals and tests for a difference between two population parameters.</p>
+              <ul class="topics"><li>z tests &amp; CIs for a difference of means</li><li>Two-sample t test &amp; CI</li><li>Analysis of paired data</li><li>Difference of proportions</li><li>Ratio of two variances</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#twot">demo: two-sample t</a><a class="tag demo-link" href="./index.html#paired">demo: paired</a></div>
+            </div>
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S17</span><span class="sess-kind">theory</span><span class="sess-title">Topic 5 — Inferences based on two samples (cont.)</span></div>
+              <p class="sess-obj">Continue with two-sample tests, paired data and variance comparisons.</p>
+              <ul class="topics"><li>Two-sample t test &amp; CI</li><li>Analysis of paired data</li><li>Two population variances</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#twot">demo: two-sample t</a><a class="tag demo-link" href="./index.html#paired">demo: paired</a></div>
+            </div>
+
+            <div class="sess practice">
+              <div class="sess-head"><span class="sess-num">S18</span><span class="sess-kind practice">practice</span><span class="sess-title">Problem Set 2</span></div>
+              <p class="sess-obj">Assessed problem set covering one- and two-sample inference.</p>
+              <ul class="topics"><li>Problem Set 2</li></ul>
+              <div class="tags"><span class="tag read">assessed · part of 20%</span></div>
+            </div>
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S19</span><span class="sess-kind">theory</span><span class="sess-title">Topic 5 — Inferences based on two samples (cont.)</span></div>
+              <p class="sess-obj">Final two-sample session before the midterm.</p>
+              <ul class="topics"><li>Difference of means</li><li>Paired data</li><li>Difference of proportions</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#twot">demo: two-sample t</a></div>
+            </div>
+
+            <div class="sess exam">
+              <div class="sess-head"><span class="sess-num">S20</span><span class="sess-kind exam">exam</span><span class="sess-title">Midterm exam — Module 1 (Topics 1, 2, 3 &amp; 4)</span></div>
+              <p class="sess-obj">Closed-book exam via BlackBoard Ultra. Date tentative — may fall in session 18 or 19 depending on class pace. One double-sided A4 formula sheet and a simple calculator allowed.</p>
+              <ul class="topics"><li>Sampling distributions</li><li>Point estimation</li><li>Confidence intervals</li><li>One-sample testing</li></ul>
+              <div class="tags"><span class="tag read">assessed · 20%</span></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- MODULE 2 -->
+        <div class="module">
+          <div class="module-head">
+            <span class="mtag">Module 2</span>
+            <span class="mtitle">Two-sample inference, ANOVA &amp; comprehensive exams</span>
+            <span class="mmeta">Topics 5–7 · sessions 21–30</span>
+          </div>
+          <div class="timeline">
+
+            <div class="sess practice">
+              <div class="sess-head"><span class="sess-num">S21</span><span class="sess-kind practice">practice</span><span class="sess-title">Inference based on two samples</span></div>
+              <p class="sess-obj">Problem solving on two-sample inference.</p>
+              <ul class="topics"><li>Problem solving</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#twot">demo: two-sample t</a><a class="tag demo-link" href="./index.html#paired">demo: paired</a></div>
+            </div>
+
+            <div class="sess practice">
+              <div class="sess-head"><span class="sess-num">S22</span><span class="sess-kind practice">practice</span><span class="sess-title">Inference based on two samples with Python</span></div>
+              <p class="sess-obj">Two-sample tests and confidence intervals implemented in Python.</p>
+              <ul class="topics"><li>Python lab</li><li>Two-sample inference</li></ul>
+              <div class="tags"><span class="tag read">Python</span><a class="tag demo-link" href="./index.html#twot">demo: two-sample t</a></div>
+            </div>
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S23</span><span class="sess-kind">theory</span><span class="sess-title">Topic 6 — Analysis of variance: single factor</span></div>
+              <p class="sess-obj">One-way ANOVA: comparing quantitative responses across more than two populations or treatments.</p>
+              <ul class="topics"><li>Single-factor ANOVA</li><li>Multiple comparisons in ANOVA</li><li>More on single-factor ANOVA</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#anova">demo: one-way ANOVA (F = MSB/MSE)</a></div>
+            </div>
+
+            <div class="sess practice">
+              <div class="sess-head"><span class="sess-num">S24</span><span class="sess-kind practice">practice</span><span class="sess-title">ANOVA single factor with Python</span></div>
+              <p class="sess-obj">Run a one-way ANOVA in Python and interpret the F test.</p>
+              <ul class="topics"><li>Python lab</li><li>Single-factor ANOVA</li></ul>
+              <div class="tags"><span class="tag read">Python</span><a class="tag demo-link" href="./index.html#anova">demo: ANOVA</a></div>
+            </div>
+
+            <div class="sess practice">
+              <div class="sess-head"><span class="sess-num">S25</span><span class="sess-kind practice">practice</span><span class="sess-title">Problem Set 3</span></div>
+              <p class="sess-obj">Assessed problem set covering two-sample inference and single-factor ANOVA.</p>
+              <ul class="topics"><li>Problem Set 3</li></ul>
+              <div class="tags"><span class="tag read">assessed · part of 20%</span></div>
+            </div>
+
+            <div class="sess theory">
+              <div class="sess-head"><span class="sess-num">S26</span><span class="sess-kind">theory</span><span class="sess-title">Topic 7 — Multifactor analysis of variance</span></div>
+              <p class="sess-obj">Extend ANOVA to two or more simultaneous factors.</p>
+              <ul class="topics"><li>Two-factor ANOVA</li><li>The fixed-effects model</li><li>Randomized block experiments</li><li>Random &amp; mixed-effects models</li></ul>
+              <div class="tags"><a class="tag demo-link" href="./index.html#anova">demo: ANOVA (variance decomposition)</a></div>
+            </div>
+
+            <div class="sess practice">
+              <div class="sess-head"><span class="sess-num">S27</span><span class="sess-kind practice">practice</span><span class="sess-title">ANOVA multifactor with Python</span></div>
+              <p class="sess-obj">Fit and interpret a multifactor ANOVA in Python.</p>
+              <ul class="topics"><li>Python lab</li><li>Two-factor ANOVA</li></ul>
+              <div class="tags"><span class="tag read">Python</span><a class="tag demo-link" href="./index.html#anova">demo: ANOVA</a></div>
+            </div>
+
+            <div class="sess practice">
+              <div class="sess-head"><span class="sess-num">S28</span><span class="sess-kind practice">practice</span><span class="sess-title">Problem Set 4</span></div>
+              <p class="sess-obj">Final assessed problem set covering multifactor ANOVA.</p>
+              <ul class="topics"><li>Problem Set 4</li></ul>
+              <div class="tags"><span class="tag read">assessed · completes the 20%</span></div>
+            </div>
+
+            <div class="sess exam">
+              <div class="sess-head"><span class="sess-num">S29</span><span class="sess-kind exam">exam</span><span class="sess-title">Computer exam with Python</span></div>
+              <p class="sess-obj">Individual, open-book Python exam: solve and discuss questions covering all topics of the course, evaluating both understanding and Python use.</p>
+              <ul class="topics"><li>Open book · Python</li><li>All topics</li></ul>
+              <div class="tags"><span class="tag read">assessed · 20%</span></div>
+            </div>
+
+            <div class="sess exam">
+              <div class="sess-head"><span class="sess-num">S30</span><span class="sess-kind exam">exam</span><span class="sess-title">Final exam</span></div>
+              <p class="sess-obj">Comprehensive closed-book exam covering all content from the first to the last session, similar in style to the problem sets with theory and practice questions. Minimum 3.5 required to pass; two double-sided A4 formula sheets and a simple calculator allowed.</p>
+              <ul class="topics"><li>All topics 1–7</li><li>Closed book</li></ul>
+              <div class="tags"><span class="tag read">assessed · 30% · min. 3.5 to pass</span></div>
+            </div>
+
+          </div>
+        </div>
+
+        <p class="note"><strong>Key bibliography.</strong> Jay L. Devore, <em>Probability and Statistics for Engineering
+          and the Sciences</em> (DEV) — e.g. Chapter 5 §5.3–5.5 for sampling distributions — is the primary reference,
+          complemented by the course slides, problem sets and class notes.</p>
+      </section>
+    </main>
+
+    <footer>
+      <span>data-analysis-lab — Andrea Montana · IE BCSAI</span>
+      <span class="more">
+        <a href="https://github.com/andreaisabelmontana/discrete-math-lab" target="_blank">discrete-math-lab</a>
+        <a href="https://github.com/andreaisabelmontana/prob-stats-lab" target="_blank">prob-stats-lab</a>
+        <a href="https://github.com/andreaisabelmontana/business-lab" target="_blank">business-lab</a>
+        <a href="https://github.com/andreaisabelmontana/research-methods-lab" target="_blank">research-methods-lab</a>
+        <a href="https://github.com/andreaisabelmontana/big-history-lab" target="_blank">big-history-lab</a>
+        <a href="https://github.com/andreaisabelmontana/data-analysis-lab" target="_blank">source</a>
+      </span>
+    </footer>
+  </body>
+</html>
