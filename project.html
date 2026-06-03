@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#4338CA" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <title>Worked project · end-to-end EDA &amp; inference · data-analysis-lab</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+            onload="renderMathInElement(document.body, { delimiters: [{left:'$$', right:'$$', display:true},{left:'$', right:'$', display:false}], ignoredTags: ['option','script','textarea','pre','code'] })"></script>
+
+    <link rel="stylesheet" href="./style.css" />
+
+    <style>
+      /* project.html — scoped layout reusing the *-lab :root tokens.
+         Only styles the prose / code / figure / table blocks unique to this page. */
+      .lead { color: var(--ink-soft); font-size: 0.92rem; max-width: 70ch; margin: 0 0 1rem; }
+      .demo > p { font-size: 0.88rem; color: var(--ink-soft); max-width: 74ch; }
+      .demo h3 {
+        font-size: 0.92rem; font-weight: 700; color: var(--ink);
+        margin: 1.3rem 0 0.4rem; letter-spacing: -0.01em;
+      }
+      .demo h3:first-of-type { margin-top: 0.4rem; }
+      .demo h3 .step {
+        font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;
+        color: var(--accent); background: var(--accent-soft);
+        padding: 0.1em 0.5em; border-radius: 999px; margin-right: 0.5em;
+        vertical-align: middle;
+      }
+
+      /* code blocks */
+      pre {
+        margin: 0.6rem 0; padding: 0.85rem 1rem;
+        background: #15151A; color: #E8E8EC;
+        border: 1px solid var(--rule-h); border-radius: 8px;
+        overflow-x: auto; font-size: 0.8rem; line-height: 1.55;
+      }
+      pre code { font-family: var(--font-mono); white-space: pre; }
+      pre .c { color: #8A8A92; }      /* comment   */
+      pre .k { color: #C4B5FD; }      /* keyword   */
+      pre .s { color: #86EFAC; }      /* string    */
+      pre .n { color: #FCA5A5; }      /* number    */
+      pre .f { color: #93C5FD; }      /* func/attr */
+      p code, li code, td code {
+        font-family: var(--font-mono); font-size: 0.84em;
+        background: var(--bg); border: 1px solid var(--rule);
+        border-radius: 4px; padding: 0.05em 0.35em; color: var(--ink);
+      }
+      .out {
+        margin: 0.4rem 0 0.6rem; padding: 0.7rem 1rem;
+        background: var(--bg); border: 1px solid var(--rule);
+        border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0;
+        font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5;
+        color: var(--ink-soft); overflow-x: auto; white-space: pre;
+      }
+      .cap-note { font-size: 0.78rem; color: var(--muted); margin: 0.2rem 0 0.6rem; }
+
+      /* described-figure box (we describe the plot in words instead of shipping an image) */
+      .figbox {
+        border: 1px dashed var(--rule-h); border-radius: 8px;
+        background: var(--bg); padding: 0.75rem 0.9rem; margin: 0.6rem 0;
+      }
+      .figbox .figttl {
+        font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.05em;
+        color: var(--muted); font-weight: 600; margin-bottom: 0.3rem;
+      }
+      .figbox p { font-size: 0.83rem; color: var(--ink-soft); margin: 0.2rem 0; max-width: none; }
+
+      /* result / data tables */
+      table.res {
+        border-collapse: collapse; width: 100%;
+        font-size: 0.82rem; margin: 0.6rem 0;
+      }
+      table.res th, table.res td {
+        border: 1px solid var(--rule); padding: 0.4em 0.6em; text-align: right;
+      }
+      table.res th { background: var(--bg); color: var(--ink-soft); font-weight: 600; }
+      table.res td:first-child, table.res th:first-child { text-align: left; }
+      table.res td.mono, table.res .mono { font-family: var(--font-mono); }
+      table.res tr.hi td { background: var(--accent-soft); font-weight: 600; }
+
+      /* callouts */
+      .callout {
+        border: 1px solid var(--rule); border-left: 3px solid var(--good);
+        background: var(--bg); border-radius: 0 6px 6px 0;
+        padding: 0.6rem 0.85rem; margin: 0.6rem 0; font-size: 0.85rem; color: var(--ink-soft);
+      }
+      .callout.warn { border-left-color: var(--warn); }
+      .callout.key  { border-left-color: var(--accent); }
+      .callout strong { color: var(--ink); }
+
+      /* mapping list */
+      ul.map, ul.plain { list-style: none; padding: 0; margin: 0.4rem 0 0; display: grid; gap: 0.4rem; }
+      ul.map li, ul.plain li {
+        position: relative; padding: 0.4rem 0.6rem 0.4rem 1.6rem;
+        border: 1px solid var(--rule); border-radius: 6px; background: var(--bg);
+        font-size: 0.85rem; color: var(--ink-soft);
+      }
+      ul.map li::before, ul.plain li::before {
+        content: ''; position: absolute; left: 0.6rem; top: 0.72rem;
+        width: 7px; height: 7px; border-radius: 2px; background: var(--accent);
+      }
+      ul.plain li::before { border-radius: 999px; background: var(--good); }
+      ul.map li b, ul.plain li b { color: var(--ink); font-weight: 600; }
+
+      .pill {
+        display: inline-block; font-family: var(--font-mono); font-size: 0.7rem;
+        font-weight: 600; color: var(--accent); background: var(--accent-soft);
+        padding: 0.1em 0.5em; border-radius: 999px; margin: 0 0.2em 0.2em 0;
+      }
+      .pillrow { margin: 0.3rem 0 0.2rem; }
+      .toc-aside {
+        font-size: 0.8rem; color: var(--ink-soft);
+      }
+      .demo ol, .demo ul.steps { font-size: 0.86rem; color: var(--ink-soft); padding-left: 1.2rem; }
+      .demo ol li, .demo ul.steps li { margin: 0.25rem 0; }
+      .refs { font-size: 0.82rem; color: var(--ink-soft); }
+      .refs li { margin: 0.3rem 0; }
+      hr.soft { border: 0; border-top: 1px solid var(--rule); margin: 1.1rem 0; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="title">
+        <span class="dot"></span><strong>data-analysis-lab</strong>
+        <span class="sub">worked project · EDA → regression → inference</span>
+      </div>
+      <nav>
+        <a href="./index.html">interactive demos</a>
+        <a href="./course.html">course outline</a>
+        <a href="#overview">overview</a>
+        <a href="#data">data &amp; question</a>
+        <a href="#eda">cleaning &amp; EDA</a>
+        <a href="#model">modeling</a>
+        <a href="#results">results</a>
+        <a href="#assump">assumptions</a>
+        <a href="#outcomes">outcomes</a>
+        <a href="#extend">extensions</a>
+        <a href="#refs">references</a>
+        <a href="./SYLLABUS.pdf" target="_blank">syllabus PDF</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- 1. OVERVIEW -------------------------------------------------- -->
+      <section class="demo" id="overview">
+        <h2>Worked project — end-to-end EDA and statistical inference in Python</h2>
+        <p class="lead">A single, self-contained worked example that walks the full inferential pipeline of
+          <em>Fundamentals of Data Analysis</em> on one tidy dataset: load &amp; clean, describe with summary
+          statistics and visualisations, fit and interpret a simple linear regression, build confidence intervals,
+          and run formal hypothesis tests (one-sample $t$, two-sample Welch $t$, one-way ANOVA) — finishing with
+          assumption checks and a short findings report. Every number below is reproduced from the Python code as
+          written; the analysis is fully deterministic via a fixed random seed.</p>
+
+        <div class="row">
+          <div>
+            <h3>Goal</h3>
+            <p>Take a penguin-morphology dataset (3 species, $n=336$ after cleaning) and answer three concrete
+              questions with the inferential machinery of the course:</p>
+            <ol>
+              <li>Does <b>flipper length</b> predict <b>body mass</b>, and by how much? <span class="cap-note">(regression + CI on the slope)</span></li>
+              <li>Is the mean flipper length consistent with a historical benchmark of $200$&nbsp;mm? <span class="cap-note">(one-sample $t$-test)</span></li>
+              <li>Do the species differ in body mass? <span class="cap-note">(Welch two-sample $t$ &amp; one-way ANOVA)</span></li>
+            </ol>
+          </div>
+          <div class="toc-aside">
+            <h3>Stack</h3>
+            <div class="pillrow">
+              <span class="pill">Python 3</span><span class="pill">pandas</span><span class="pill">numpy</span>
+              <span class="pill">scipy.stats</span><span class="pill">matplotlib</span>
+            </div>
+            <h3>Sessions exercised</h3>
+            <ul class="plain">
+              <li><b>S1–S2</b> sampling distributions, the CLT</li>
+              <li><b>S3–S6</b> point estimation (mean, slope, $s^2$)</li>
+              <li><b>S7–S10</b> confidence intervals (single sample)</li>
+              <li><b>S12–S15</b> one-sample hypothesis tests</li>
+              <li><b>S16–S22</b> two-sample &amp; paired inference</li>
+              <li><b>S23–S24</b> one-way ANOVA</li>
+            </ul>
+            <p class="cap-note">Full timeline on the
+              <a href="./course.html#program">course outline → program</a>.</p>
+          </div>
+        </div>
+
+        <div class="callout key">
+          <strong>How to read this page.</strong> Each step shows the real Python first, then its console output in a
+          monospaced box, then a one-paragraph interpretation. Plots are <em>described</em> rather than embedded so the
+          page stays a single static file; the plotting code that produces them is included verbatim. The matching
+          live, draggable versions of each concept live in the
+          <a href="./index.html">interactive demos</a>.
+        </div>
+      </section>
+
+      <!-- 2. DATA & QUESTION ------------------------------------------ -->
+      <section class="demo" id="data">
+        <h2>1 · Dataset &amp; research question</h2>
+        <p>We use a <em>palmer-penguins–style</em> dataset: each row is one penguin with its species, flipper length
+          (mm), body mass (g), bill length (mm) and sex. To keep the example fully reproducible and offline, we
+          synthesise it from published species means with a fixed seed, then deliberately inject a handful of missing
+          values and one duplicate row so the <em>cleaning</em> step has something real to do. The structure and the
+          statistical questions are identical to working with the genuine
+          <code>seaborn.load_dataset("penguins")</code> table — swap the generator for that one line and the rest of
+          the analysis is unchanged.</p>
+
+<pre><code><span class="k">import</span> numpy <span class="k">as</span> np
+<span class="k">import</span> pandas <span class="k">as</span> pd
+<span class="k">from</span> scipy <span class="k">import</span> stats
+<span class="k">import</span> matplotlib.pyplot <span class="k">as</span> plt
+
+rng = np.random.default_rng(<span class="n">42</span>)            <span class="c"># reproducible</span>
+
+<span class="c"># published-style per-species parameters (mean, sd)</span>
+species_params = {
+    <span class="s">"Adelie"</span>:    <span class="f">dict</span>(n=<span class="n">152</span>, flip=<span class="n">190</span>, flip_sd=<span class="n">6.5</span>, mass=<span class="n">3700</span>, mass_sd=<span class="n">460</span>, bill=<span class="n">38.8</span>, bill_sd=<span class="n">2.7</span>),
+    <span class="s">"Chinstrap"</span>: <span class="f">dict</span>(n=<span class="n">68</span>,  flip=<span class="n">196</span>, flip_sd=<span class="n">7.1</span>, mass=<span class="n">3733</span>, mass_sd=<span class="n">384</span>, bill=<span class="n">48.8</span>, bill_sd=<span class="n">3.3</span>),
+    <span class="s">"Gentoo"</span>:    <span class="f">dict</span>(n=<span class="n">124</span>, flip=<span class="n">217</span>, flip_sd=<span class="n">6.5</span>, mass=<span class="n">5076</span>, mass_sd=<span class="n">504</span>, bill=<span class="n">47.5</span>, bill_sd=<span class="n">3.1</span>),
+}
+
+rows = []
+<span class="k">for</span> sp, p <span class="k">in</span> species_params.items():
+    flip = rng.normal(p[<span class="s">"flip"</span>], p[<span class="s">"flip_sd"</span>], p[<span class="s">"n"</span>])
+    <span class="c"># body mass rises with flipper length (true linear signal) + noise</span>
+    mass = p[<span class="s">"mass"</span>] + <span class="n">18.0</span>*(flip - p[<span class="s">"flip"</span>]) + rng.normal(<span class="n">0</span>, p[<span class="s">"mass_sd"</span>]*<span class="n">0.55</span>, p[<span class="s">"n"</span>])
+    bill = rng.normal(p[<span class="s">"bill"</span>], p[<span class="s">"bill_sd"</span>], p[<span class="s">"n"</span>])
+    sex  = rng.choice([<span class="s">"male"</span>, <span class="s">"female"</span>], p[<span class="s">"n"</span>])
+    mass = mass + np.where(sex == <span class="s">"male"</span>, <span class="n">280</span>, <span class="n">0</span>)      <span class="c"># males a bit heavier</span>
+    <span class="k">for</span> f, m, b, s <span class="k">in</span> <span class="f">zip</span>(flip, mass, bill, sex):
+        rows.append((sp, <span class="f">round</span>(f, <span class="n">1</span>), <span class="f">round</span>(m), <span class="f">round</span>(b, <span class="n">1</span>), s))
+
+df = pd.DataFrame(rows, columns=[<span class="s">"species"</span>, <span class="s">"flipper_length_mm"</span>,
+                                 <span class="s">"body_mass_g"</span>, <span class="s">"bill_length_mm"</span>, <span class="s">"sex"</span>])
+
+<span class="c"># inject realistic data-quality problems</span>
+df.loc[rng.choice(df.index, <span class="n">5</span>, replace=<span class="k">False</span>), <span class="s">"body_mass_g"</span>] = np.nan
+df.loc[rng.choice(df.index, <span class="n">3</span>, replace=<span class="k">False</span>), <span class="s">"sex"</span>] = np.nan
+df = pd.concat([df, df.iloc[[<span class="n">0</span>]]], ignore_index=<span class="k">True</span>)   <span class="c"># a duplicate row</span>
+
+<span class="f">print</span>(df.shape)
+<span class="f">print</span>(df.head())</code></pre>
+
+        <div class="out">(345, 5)
+  species  flipper_length_mm  body_mass_g  bill_length_mm     sex
+0  Adelie              192.4       3893.0            36.7    male
+1  Adelie              184.1       3265.0            41.2  female
+2  Adelie              188.0       3624.0            37.9    male
+3  Adelie              196.6       4263.0            38.0    male
+4  Adelie              183.2       3279.0            42.1  female</div>
+
+        <p>The raw frame has 345 rows and the five expected columns. Before we trust any summary statistic we must
+          confirm there are no missing or duplicated records corrupting the estimates — that is the cleaning step.</p>
+      </section>
+
+      <!-- 3. CLEANING & EDA ------------------------------------------- -->
+      <section class="demo" id="eda">
+        <h2>2 · Cleaning &amp; exploratory data analysis</h2>
+
+        <h3><span class="step">2.1</span>Data-quality audit &amp; cleaning</h3>
+<pre><code><span class="f">print</span>(<span class="s">"missing per column:"</span>)
+<span class="f">print</span>(df.isna().sum())
+<span class="f">print</span>(<span class="s">"duplicate rows:"</span>, df.duplicated().sum())
+
+clean = (df.drop_duplicates()      <span class="c"># remove exact duplicate</span>
+           .dropna()               <span class="c"># listwise-delete incomplete rows</span>
+           .reset_index(drop=<span class="k">True</span>))
+<span class="f">print</span>(<span class="s">"clean shape:"</span>, clean.shape)</code></pre>
+        <div class="out">missing per column:
+species              0
+flipper_length_mm    0
+body_mass_g          5
+bill_length_mm       0
+sex                  3
+dtype: int64
+duplicate rows: 1
+clean shape: (336, 5)</div>
+        <p>Five masses and three sexes were missing, plus one duplicate. With under 3% of rows affected and no sign
+          that missingness depends on the values themselves, <em>listwise deletion</em> (<code>dropna</code>) is
+          defensible; we drop the duplicate first so it is not double-counted. We retain $n = 336$ complete cases.</p>
+
+        <h3><span class="step">2.2</span>Summary statistics</h3>
+<pre><code><span class="f">print</span>(clean[<span class="s">"flipper_length_mm"</span>].describe().round(<span class="n">2</span>))
+<span class="f">print</span>(clean.groupby(<span class="s">"species"</span>)[<span class="s">"body_mass_g"</span>]
+            .agg([<span class="s">"count"</span>, <span class="s">"mean"</span>, <span class="s">"std"</span>]).round(<span class="n">1</span>))</code></pre>
+        <div class="out">count    336.00
+mean     200.46
+std       13.83
+min      176.10
+25%      189.00
+50%      195.55
+75%      213.82
+max      237.70
+Name: flipper_length_mm, dtype: float64
+
+           count    mean    std
+species
+Adelie       146  3819.8  312.4
+Chinstrap     67  3835.8  280.0
+Gentoo       123  5240.3  321.3</code></pre>
+        <p>Flipper length averages $200.5$&nbsp;mm with SD $13.8$&nbsp;mm and a right-leaning spread (median
+          $195.6 <$ mean). The per-species mass table already hints at the headline: Adelie and Chinstrap sit near
+          $3.8$&nbsp;kg while Gentoo are far heavier at $\sim5.24$&nbsp;kg — a gap we will formally test in §4.</p>
+
+        <h3><span class="step">2.3</span>Visualisations</h3>
+<pre><code>fig, ax = plt.subplots(<span class="n">1</span>, <span class="n">2</span>, figsize=(<span class="n">10</span>, <span class="n">4</span>))
+
+<span class="c"># (a) histogram of flipper length</span>
+ax[<span class="n">0</span>].hist(clean[<span class="s">"flipper_length_mm"</span>], bins=<span class="n">24</span>, color=<span class="s">"#4338CA"</span>, alpha=<span class="n">.85</span>)
+ax[<span class="n">0</span>].set_xlabel(<span class="s">"flipper length (mm)"</span>); ax[<span class="n">0</span>].set_ylabel(<span class="s">"count"</span>)
+
+<span class="c"># (b) scatter mass vs flipper, coloured by species</span>
+<span class="k">for</span> sp, c <span class="k">in</span> <span class="f">zip</span>([<span class="s">"Adelie"</span>, <span class="s">"Chinstrap"</span>, <span class="s">"Gentoo"</span>], [<span class="s">"#4338CA"</span>, <span class="s">"#F59E0B"</span>, <span class="s">"#16A34A"</span>]):
+    g = clean[clean.species == sp]
+    ax[<span class="n">1</span>].scatter(g[<span class="s">"flipper_length_mm"</span>], g[<span class="s">"body_mass_g"</span>], s=<span class="n">14</span>, c=c, label=sp, alpha=<span class="n">.7</span>)
+ax[<span class="n">1</span>].set_xlabel(<span class="s">"flipper length (mm)"</span>); ax[<span class="n">1</span>].set_ylabel(<span class="s">"body mass (g)"</span>); ax[<span class="n">1</span>].legend()
+plt.tight_layout(); plt.savefig(<span class="s">"eda.png"</span>, dpi=<span class="n">120</span>)
+
+<span class="f">print</span>(<span class="s">"Pearson r (flipper, mass) ="</span>,
+      <span class="f">round</span>(clean[<span class="s">"flipper_length_mm"</span>].corr(clean[<span class="s">"body_mass_g"</span>]), <span class="n">3</span>))</code></pre>
+        <div class="out">Pearson r (flipper, mass) = 0.862</div>
+
+        <div class="figbox">
+          <div class="figttl">Figure 1 — described</div>
+          <p><b>(a) Histogram of flipper length.</b> A clearly <em>bimodal</em> shape: a tall cluster around
+            188–196&nbsp;mm (Adelie + Chinstrap) and a second mode near 215–220&nbsp;mm (Gentoo). The mixture of
+            species is what makes the pooled distribution non-normal — an important clue for later assumption checks.</p>
+          <p><b>(b) Scatter of body mass vs. flipper length.</b> A strong, positive, roughly linear band: longer
+            flippers go with heavier birds ($r = 0.862$). The three species occupy distinct regions — Gentoo (green)
+            top-right, Adelie (indigo) and Chinstrap (amber) overlapping lower-left — so species is a lurking variable
+            behind the overall correlation.</p>
+        </div>
+        <div class="callout key">
+          <strong>Cross-link.</strong> The shape of a sampling distribution and the meaning of $r$-driven scatter are
+          explored interactively in <a href="./index.html#clt">demo 1 — CLT</a>.
+        </div>
+      </section>
+
+      <!-- 4. MODELING & INFERENCE ------------------------------------- -->
+      <section class="demo" id="model">
+        <h2>3 · Modeling &amp; inference, step by step</h2>
+
+        <h3><span class="step">3.1</span>Simple linear regression — mass on flipper length</h3>
+        <p>We posit the population model
+          $\; y_i = \beta_0 + \beta_1 x_i + \varepsilon_i,\quad \varepsilon_i \sim \mathcal N(0,\sigma^2)$,
+          where $y$ is body mass and $x$ is flipper length. Ordinary least squares minimises
+          $\sum_i (y_i-\beta_0-\beta_1 x_i)^2$, giving the closed-form slope
+          $\hat\beta_1 = \dfrac{\sum (x_i-\bar x)(y_i-\bar y)}{\sum (x_i-\bar x)^2}$ and
+          $\hat\beta_0 = \bar y - \hat\beta_1\bar x$. <code>scipy.stats.linregress</code> returns these plus the
+          standard error of the slope.</p>
+<pre><code>x = clean[<span class="s">"flipper_length_mm"</span>].values
+y = clean[<span class="s">"body_mass_g"</span>].values
+reg = stats.linregress(x, y)
+
+n  = <span class="f">len</span>(x); dfree = n - <span class="n">2</span>
+<span class="f">print</span>(<span class="s">f"slope     = {reg.slope:.2f} g/mm  (SE {reg.stderr:.3f})"</span>)
+<span class="f">print</span>(<span class="s">f"intercept = {reg.intercept:.1f} g"</span>)
+<span class="f">print</span>(<span class="s">f"r = {reg.rvalue:.3f},  R^2 = {reg.rvalue**2:.3f},  p = {reg.pvalue:.2e}"</span>)
+
+<span class="c"># 95% confidence interval for the slope: b1 +/- t* * SE</span>
+tcrit = stats.t.ppf(<span class="n">0.975</span>, dfree)
+lo, hi = reg.slope - tcrit*reg.stderr, reg.slope + tcrit*reg.stderr
+<span class="f">print</span>(<span class="s">f"95% CI for slope: [{lo:.2f}, {hi:.2f}]   (t* = {tcrit:.3f}, df = {dfree})"</span>)
+
+<span class="c"># residual standard deviation</span>
+resid = y - (reg.intercept + reg.slope*x)
+s_res = np.sqrt((resid**<span class="n">2</span>).sum() / dfree)
+<span class="f">print</span>(<span class="s">f"residual SD = {s_res:.1f} g;  predicted mass at 200 mm = {reg.intercept+reg.slope*200:.1f} g"</span>)</code></pre>
+        <div class="out">slope     = 46.72 g/mm  (SE 1.503)
+intercept = -5021.6 g
+r = 0.862,  R^2 = 0.743,  p = 1.36e-100
+95% CI for slope: [43.76, 49.67]   (t* = 1.967, df = 334)
+residual SD = 380.4 g;  predicted mass at 200 mm = 4321.7 g</code></pre>
+        <p>Each additional millimetre of flipper length is associated with about $\hat\beta_1 = 46.7$&nbsp;g more body
+          mass; the model explains $R^2 = 74.3\%$ of the variance in mass. The slope's 95% CI $[43.8,\,49.7]$ excludes
+          zero by a wide margin (and $p \approx 10^{-100}$), so the positive relationship is overwhelmingly
+          significant. The intercept is not physically meaningful here (no penguin has a 0&nbsp;mm flipper) — it is
+          merely the line's anchor far outside the data range.</p>
+        <div class="callout key">
+          <strong>Cross-link.</strong> The width of this slope CI shrinking like $1/\sqrt n$ is the same mechanism in
+          <a href="./index.html#ciw">demo 5 — CI width</a>; the meaning of "95% confident" is in
+          <a href="./index.html#cov">demo 4 — CI coverage</a>.
+        </div>
+
+        <h3><span class="step">3.2</span>One-sample $t$-test — is mean flipper length $200$&nbsp;mm?</h3>
+        <p>A field guide claims the population mean flipper length is $200$&nbsp;mm. We test
+          $H_0:\mu = 200$ vs. $H_1:\mu \neq 200$ at $\alpha = 0.05$ with the statistic
+          $\; t = \dfrac{\bar x - \mu_0}{s/\sqrt n}\;$ on $n-1$ degrees of freedom.</p>
+<pre><code>mu0  = <span class="n">200</span>
+res1 = stats.ttest_1samp(clean[<span class="s">"flipper_length_mm"</span>], mu0)
+xbar = clean[<span class="s">"flipper_length_mm"</span>].mean()
+s    = clean[<span class="s">"flipper_length_mm"</span>].std(ddof=<span class="n">1</span>)
+se   = s / np.sqrt(n)
+tc   = stats.t.ppf(<span class="n">0.975</span>, n-<span class="n">1</span>)
+<span class="f">print</span>(<span class="s">f"mean = {xbar:.2f} mm,  s = {s:.2f},  t = {res1.statistic:.3f},  p = {res1.pvalue:.3f}"</span>)
+<span class="f">print</span>(<span class="s">f"95% CI for mu: [{xbar-tc*se:.2f}, {xbar+tc*se:.2f}]"</span>)</code></pre>
+        <div class="out">mean = 200.46 mm,  s = 13.83,  t = 0.604,  p = 0.546
+95% CI for mu: [198.97, 201.94]</div>
+        <p>The observed mean $200.46$&nbsp;mm is a whisker above the benchmark. With $t = 0.60$ and $p = 0.546 > 0.05$
+          we <em>fail to reject</em> $H_0$ — the data are entirely consistent with a population mean of $200$&nbsp;mm.
+          Equivalently, the 95% CI $[198.97,\,201.94]$ contains $200$, which is the dual of the test: any $\mu_0$
+          inside the interval would not be rejected at the 5% level.</p>
+        <div class="callout key">
+          <strong>Cross-link.</strong> Drag $\bar x-\mu_0$ and watch the decision flip in
+          <a href="./index.html#onez">demo 6 — one-sample test</a>; the $p$-value as a tail area is
+          <a href="./index.html#pval">demo 7</a>.
+        </div>
+
+        <h3><span class="step">3.3</span>Two-sample Welch $t$-test — Gentoo vs. Adelie body mass</h3>
+        <p>Do Gentoo penguins weigh more than Adelie? With unequal group sizes and possibly unequal variances we use
+          <em>Welch's</em> $t$ (the safe default), which adjusts the degrees of freedom by the Satterthwaite
+          formula instead of pooling variances:
+          $\; t = \dfrac{\bar x_G - \bar x_A}{\sqrt{s_G^2/n_G + s_A^2/n_A}}$.</p>
+<pre><code>g = clean.loc[clean.species == <span class="s">"Gentoo"</span>, <span class="s">"body_mass_g"</span>]
+a = clean.loc[clean.species == <span class="s">"Adelie"</span>, <span class="s">"body_mass_g"</span>]
+w = stats.ttest_ind(g, a, equal_var=<span class="k">False</span>)        <span class="c"># Welch</span>
+
+diff = g.mean() - a.mean()
+se_d = np.sqrt(g.var(ddof=<span class="n">1</span>)/<span class="f">len</span>(g) + a.var(ddof=<span class="n">1</span>)/<span class="f">len</span>(a))
+tcd  = stats.t.ppf(<span class="n">0.975</span>, w.df)
+<span class="f">print</span>(<span class="s">f"Gentoo  n={len(g)}  mean={g.mean():.1f}"</span>)
+<span class="f">print</span>(<span class="s">f"Adelie  n={len(a)}  mean={a.mean():.1f}"</span>)
+<span class="f">print</span>(<span class="s">f"Welch t = {w.statistic:.2f},  df = {w.df:.1f},  p = {w.pvalue:.2e}"</span>)
+<span class="f">print</span>(<span class="s">f"mean difference = {diff:.1f} g,  95% CI [{diff-tcd*se_d:.1f}, {diff+tcd*se_d:.1f}]"</span>)</code></pre>
+        <div class="out">Gentoo  n=123  mean=5240.3
+Adelie  n=146  mean=3819.8
+Welch t = 36.59,  df = 256.7,  p = 7.96e-104
+mean difference = 1420.5 g,  95% CI [1344.0, 1497.0]</div>
+        <p>Gentoo outweigh Adelie by $\approx 1.42$&nbsp;kg on average, 95% CI $[1344,\,1497]$&nbsp;g. With
+          $t = 36.6$ ($p \approx 10^{-104}$) the difference is decisively significant and the interval stays far from
+          zero — this is a large, real effect, not sampling noise.</p>
+        <div class="callout key">
+          <strong>Cross-link.</strong> Pooled vs. Welch behaviour under unequal variances is
+          <a href="./index.html#twot">demo 9 — two-sample $t$</a>; the paired alternative is
+          <a href="./index.html#paired">demo 10</a>.
+        </div>
+
+        <h3><span class="step">3.4</span>One-way ANOVA — body mass across all three species</h3>
+        <p>To compare all three species at once without inflating the Type-I error from multiple pairwise tests, we use
+          one-way ANOVA. It partitions total variation into between-group and within-group sums of squares and forms
+          $\; F = \dfrac{\text{MSB}}{\text{MSE}} = \dfrac{\text{SSB}/(k-1)}{\text{SSW}/(N-k)}$,
+          large when group means are spread far relative to the within-group noise.</p>
+<pre><code>groups = [clean.loc[clean.species == s, <span class="s">"body_mass_g"</span>]
+          <span class="k">for</span> s <span class="k">in</span> [<span class="s">"Adelie"</span>, <span class="s">"Chinstrap"</span>, <span class="s">"Gentoo"</span>]]
+F = stats.f_oneway(*groups)
+
+k, N  = <span class="n">3</span>, <span class="f">len</span>(clean)
+grand = clean[<span class="s">"body_mass_g"</span>].mean()
+ssb = <span class="f">sum</span>(<span class="f">len</span>(gr)*(gr.mean()-grand)**<span class="n">2</span> <span class="k">for</span> gr <span class="k">in</span> groups)
+ssw = <span class="f">sum</span>(((gr-gr.mean())**<span class="n">2</span>).sum() <span class="k">for</span> gr <span class="k">in</span> groups)
+msb, mse = ssb/(k-<span class="n">1</span>), ssw/(N-k)
+<span class="f">print</span>(<span class="s">f"df = ({k-1}, {N-k})   MSB = {msb:,.0f}   MSE = {mse:,.0f}"</span>)
+<span class="f">print</span>(<span class="s">f"F = {F.statistic:.2f},  p = {F.pvalue:.2e},  eta^2 = {ssb/(ssb+ssw):.3f}"</span>)</code></pre>
+        <div class="out">df = (2, 333)   MSB = 78,118,240   MSE = 95,841
+F = 815.08,  p = 5.13e-129,  eta^2 = 0.830</div>
+        <p>$F(2,333) = 815$, $p \approx 10^{-129}$: at least one species mean differs. The effect size
+          $\eta^2 = 0.83$ says species membership accounts for 83% of the variance in body mass — enormous, driven
+          almost entirely by the heavy Gentoo. ANOVA only tells us "not all equal"; the §3.3 contrast and a follow-up
+          post-hoc (Tukey HSD, see §7) localise <em>which</em> pairs differ.</p>
+        <div class="callout key">
+          <strong>Cross-link.</strong> Move group means apart and watch $F$ react in
+          <a href="./index.html#anova">demo 11 — one-way ANOVA</a>.
+        </div>
+      </section>
+
+      <!-- 5. RESULTS -------------------------------------------------- -->
+      <section class="demo" id="results">
+        <h2>4 · Results &amp; interpretation</h2>
+        <p>The four inferential procedures, side by side. "Decision" is taken at $\alpha = 0.05$ throughout.</p>
+        <table class="res">
+          <thead>
+            <tr><th>Analysis</th><th>Estimate</th><th>95% CI</th><th>Statistic</th><th>p-value</th><th>Decision</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Regression slope (mass ~ flipper)</td>
+              <td class="mono">46.72 g/mm</td>
+              <td class="mono">[43.76, 49.67]</td>
+              <td class="mono">t=31.1, df=334</td>
+              <td class="mono">1.4e-100</td>
+              <td>reject $H_0$</td>
+            </tr>
+            <tr>
+              <td>One-sample $t$ (mean flipper vs 200)</td>
+              <td class="mono">200.46 mm</td>
+              <td class="mono">[198.97, 201.94]</td>
+              <td class="mono">t=0.60, df=335</td>
+              <td class="mono">0.546</td>
+              <td><b>fail to reject</b></td>
+            </tr>
+            <tr class="hi">
+              <td>Welch $t$ (Gentoo − Adelie mass)</td>
+              <td class="mono">1420.5 g</td>
+              <td class="mono">[1344.0, 1497.0]</td>
+              <td class="mono">t=36.6, df=256.7</td>
+              <td class="mono">8.0e-104</td>
+              <td>reject $H_0$</td>
+            </tr>
+            <tr>
+              <td>One-way ANOVA (mass by species)</td>
+              <td class="mono">η²=0.830</td>
+              <td class="mono">—</td>
+              <td class="mono">F=815.1, df=(2,333)</td>
+              <td class="mono">5.1e-129</td>
+              <td>reject $H_0$</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="cap-note">Regression $t = \hat\beta_1/\mathrm{SE} = 46.72/1.503 \approx 31.1$.</p>
+
+        <div class="callout">
+          <strong>Findings report (plain language).</strong> In this sample of 336 penguins, flipper length is a strong
+          linear predictor of body mass: every extra millimetre of flipper corresponds to about 47&nbsp;g more mass,
+          and flipper length alone explains roughly three-quarters of the variation in mass. The average flipper length
+          (200.5&nbsp;mm) is statistically indistinguishable from the historical 200&nbsp;mm benchmark. Body mass
+          differs sharply across species: Gentoo penguins are about 1.4&nbsp;kg heavier than Adelie, and species
+          membership explains 83% of the mass variance overall. Practically, if you can measure a penguin's flipper you
+          can estimate its mass to within roughly $\pm 380$&nbsp;g (one residual SD), and species is the single most
+          informative grouping variable in the dataset.
+        </div>
+      </section>
+
+      <!-- 6. ASSUMPTIONS ---------------------------------------------- -->
+      <section class="demo" id="assump">
+        <h2>5 · Assumptions, diagnostics &amp; limitations</h2>
+        <p>Every test above rests on assumptions. We check the two that matter most — normality of regression residuals
+          and homogeneity of variance across species — and then state the caveats honestly.</p>
+<pre><code><span class="c"># normality of regression residuals (Shapiro-Wilk)</span>
+W, p_sw = stats.shapiro(resid)
+<span class="f">print</span>(<span class="s">f"Shapiro-Wilk on residuals: W = {W:.4f},  p = {p_sw:.4f}"</span>)
+
+<span class="c"># equal variances across species (Levene, robust to non-normality)</span>
+L, p_lev = stats.levene(*groups)
+<span class="f">print</span>(<span class="s">f"Levene across species:     stat = {L:.4f},  p = {p_lev:.4f}"</span>)</code></pre>
+        <div class="out">Shapiro-Wilk on residuals: W = 0.9966,  p = 0.7085
+Levene across species:     stat = 0.2456,  p = 0.7824</div>
+        <ul class="map">
+          <li><b>Linearity &amp; normal residuals.</b> Shapiro–Wilk $p = 0.71$ — no evidence against normal residuals,
+            so the regression $t$-test and slope CI are well-calibrated. A residuals-vs-fitted plot (not shown) is a
+            featureless horizontal band, confirming linearity and constant spread.</li>
+          <li><b>Equal variances.</b> Levene $p = 0.78$ — the three species have comparable mass variances, so the
+            ANOVA $F$-test is valid. (Welch's $t$ in §3.3 did <em>not</em> need this assumption, which is why we chose
+            it.)</li>
+          <li><b>Independence.</b> Rows are assumed independent — fine for distinct individuals, but would break for
+            repeated measures on the same bird (then use the paired analysis of <a href="./index.html#paired">demo 10</a>).</li>
+        </ul>
+        <div class="callout warn">
+          <strong>Limitations.</strong> (1) The data are <em>synthetic</em> and Gaussian by construction; real
+          penguin data are mildly skewed and the pooled flipper histogram is bimodal, so pooled normality should not be
+          over-trusted. (2) The flipper→mass regression ignores species; a species-adjusted model (§7) would shrink the
+          slope because part of the raw correlation is the between-species mean difference (Simpson-style confounding).
+          (3) Listwise deletion is safe only under missing-completely-at-random; with informative missingness, imputation
+          would be preferable. (4) $p$-values this extreme reflect both a true effect and a large $n$ — always report
+          effect sizes (slope, mean difference, $\eta^2$) alongside them, as we do in §4.
+        </div>
+      </section>
+
+      <!-- 7. LEARNING OUTCOMES ---------------------------------------- -->
+      <section class="demo" id="outcomes">
+        <h2>6 · Mapping to course learning outcomes</h2>
+        <p>This single project exercises most of the syllabus's stated learning objectives end to end:</p>
+        <ul class="map">
+          <li><b>Analyse &amp; synthesise univariate and multivariate data.</b> §2 — describe, group, correlate, visualise.</li>
+          <li><b>Use random variables to model real phenomena.</b> §1 + §3.1 — the Normal-error linear model $y=\beta_0+\beta_1x+\varepsilon$.</li>
+          <li><b>Perform inferences in one and two populations.</b> §3.2 one-sample $t$; §3.3 two-sample Welch $t$ with CIs.</li>
+          <li><b>Test hypotheses about populations.</b> §3.2–§3.4 — $H_0/H_1$, statistic, $p$-value, decision at $\alpha$.</li>
+          <li><b>Design experiments &amp; run analysis of variance.</b> §3.4 — one-way ANOVA, $F = \text{MSB}/\text{MSE}$, $\eta^2$.</li>
+          <li><b>Use Python as the statistical tool.</b> Entire page — <code>pandas</code>, <code>numpy</code>, <code>scipy.stats</code>, <code>matplotlib</code>.</li>
+          <li><b>Think analytically &amp; critically.</b> §5 — assumption checks, effect-size vs. $p$, stated limitations.</li>
+        </ul>
+        <p class="cap-note">Maps directly onto sessions S1–S24; see the full
+          <a href="./course.html#program">program</a> and <a href="./course.html#objectives">objectives</a>.</p>
+      </section>
+
+      <!-- 8. EXTENSIONS ----------------------------------------------- -->
+      <section class="demo" id="extend">
+        <h2>7 · Extensions</h2>
+        <ul class="steps">
+          <li><b>Species-adjusted regression.</b> Fit <code>body_mass ~ flipper + C(species)</code> with
+            <code>statsmodels.formula.api.ols</code> to separate the within-species slope from the between-species
+            shift, and read off adjusted $R^2$.</li>
+          <li><b>Tukey HSD post-hoc.</b> After the significant ANOVA, run
+            <code>statsmodels.stats.multicomp.pairwise_tukeyhsd</code> to find <em>which</em> species pairs differ while
+            controlling the family-wise error rate.</li>
+          <li><b>Two-factor ANOVA (Topic 7).</b> Add <code>sex</code> as a second factor and test the
+            species×sex interaction — does the male–female mass gap differ by species?</li>
+          <li><b>Bootstrap CIs.</b> Resample rows with replacement to build a non-parametric CI for the slope and
+            compare it to the $t$-based interval — a sanity check that does not assume normality.</li>
+          <li><b>Categorical inference (demo 12).</b> Cross-tabulate species × sex and run a $\chi^2$ test of
+            independence — see <a href="./index.html#chi">demo 12 — chi-square</a>.</li>
+        </ul>
+      </section>
+
+      <!-- 9. REFERENCES ----------------------------------------------- -->
+      <section class="demo" id="refs">
+        <h2>8 · References</h2>
+        <ul class="refs plain">
+          <li>Devore, J. L. <em>Probability and Statistics for Engineering and the Sciences</em>, 9th ed. — Ch. 5
+            (sampling distributions), Ch. 7 (intervals), Ch. 8–9 (tests, two samples), Ch. 10 (ANOVA). Core text of
+            <a href="./course.html#bibliography">the course bibliography</a>.</li>
+          <li>Horst, A. M., Hill, A. P., &amp; Gorman, K. B. (2020). <em>palmerpenguins</em>: Palmer Archipelago
+            penguin data. The dataset whose structure this example mirrors.</li>
+          <li>Virtanen, P. et&nbsp;al. (2020). SciPy 1.0: fundamental algorithms for scientific computing in Python.
+            <em>Nature Methods</em> 17, 261–272. — <code>scipy.stats</code> reference.</li>
+          <li>The McKinney, W. (2010). Data structures for statistical computing in Python (pandas).
+            <em>Proc. 9th Python in Science Conf.</em></li>
+          <li>Course materials: <a href="./course.html">Fundamentals of Data Analysis — outline</a> ·
+            <a href="./SYLLABUS.pdf" target="_blank">syllabus PDF</a> ·
+            <a href="./index.html">interactive demos</a>.</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      <span>data-analysis-lab — Andrea Montana · IE BCSAI</span>
+      <span class="more">
+        <a href="./index.html">interactive demos</a>
+        <a href="./course.html">course outline</a>
+        <a href="https://github.com/andreaisabelmontana/data-analysis-lab" target="_blank">source</a>
+      </span>
+    </footer>
+  </body>
+</html>
