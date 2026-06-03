@@ -127,6 +127,63 @@
         border: 1px solid var(--rule); border-left: 3px solid var(--accent);
         border-radius: 6px; padding: 0.55rem 0.75rem; margin-top: 0.6rem;
       }
+
+      /* deepened-session detail */
+      .sess-detail { display: grid; gap: 0.45rem; margin: 0.5rem 0 0; }
+      .sess-detail .d { font-size: 0.79rem; color: var(--ink-soft); }
+      .sess-detail .d b { color: var(--ink); font-weight: 600; }
+      .formula {
+        font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink);
+        background: var(--bg); border: 1px solid var(--rule); border-radius: 5px;
+        padding: 0.35rem 0.55rem; margin: 0.1rem 0; overflow-x: auto; white-space: nowrap;
+      }
+      .keyidea {
+        font-size: 0.78rem; color: var(--ink-soft); background: rgba(67,56,202,0.04);
+        border: 1px dashed var(--rule-h); border-radius: 5px; padding: 0.4rem 0.6rem;
+      }
+      .keyidea b { color: var(--accent); font-weight: 600; }
+      .readmeta { font-size: 0.76rem; color: var(--muted); margin: 0.15rem 0 0; }
+      .readmeta b { color: var(--ink-soft); font-weight: 600; }
+
+      /* module learning outcomes */
+      .outcomes { list-style: none; padding: 0; margin: 0 0 0.75rem; display: grid; gap: 0.35rem; }
+      .outcomes li {
+        position: relative; padding: 0.35rem 0.6rem 0.35rem 1.5rem;
+        border: 1px solid var(--rule); border-radius: 6px; background: var(--bg);
+        font-size: 0.81rem; color: var(--ink-soft);
+      }
+      .outcomes li::before {
+        content: '→'; position: absolute; left: 0.55rem; top: 0.34rem;
+        color: var(--accent); font-weight: 700; font-size: 0.8rem;
+      }
+      .module-intro { font-size: 0.83rem; color: var(--ink-soft); margin: 0 0 0.6rem; max-width: 72ch; }
+      .outcomes-head { font-size: 0.78rem; font-weight: 700; color: var(--ink); margin: 0.2rem 0 0.4rem; }
+
+      /* glossary */
+      .glossary {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.1rem;
+        margin-top: 0.4rem;
+      }
+      @media (max-width: 760px) { .glossary { grid-template-columns: 1fr; } }
+      .glossary dt {
+        font-weight: 700; font-size: 0.82rem; color: var(--ink);
+        border-bottom: 1px solid var(--rule); padding-bottom: 0.1rem; margin-bottom: 0.15rem;
+      }
+      .glossary dd { margin: 0 0 0.55rem; font-size: 0.79rem; color: var(--ink-soft); }
+      .glossary dd .formula { white-space: normal; display: inline-block; margin: 0.2rem 0 0; }
+
+      /* annotated bibliography */
+      ul.biblio { list-style: none; padding: 0; margin: 0.4rem 0 0; display: grid; gap: 0.55rem; }
+      ul.biblio li {
+        border: 1px solid var(--rule); border-radius: 6px; background: var(--bg);
+        padding: 0.55rem 0.7rem; font-size: 0.8rem; color: var(--ink-soft);
+      }
+      ul.biblio li .ref { color: var(--ink); font-weight: 600; }
+      ul.biblio li .where {
+        font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted);
+        display: inline-block; margin-top: 0.25rem;
+        border: 1px solid var(--rule); border-radius: 999px; padding: 0.05em 0.5em;
+      }
     </style>
   </head>
   <body>
@@ -142,6 +199,8 @@
         <a href="#method">methodology</a>
         <a href="#assessment">assessment</a>
         <a href="#program">program</a>
+        <a href="#glossary">key concepts</a>
+        <a href="#bibliography">bibliography</a>
         <a href="./SYLLABUS.pdf" target="_blank">syllabus PDF</a>
       </nav>
     </header>
@@ -157,9 +216,21 @@
           categorical data — using Python throughout.</p>
         <p class="lead">The use of probability models and statistical methods for analysing data is common practice in
           virtually all scientific disciplines. Data analysis teaches us to make intelligent judgments and informed
-          decisions in the presence of uncertainty and variation. This course is the foundation for later subjects such
-          as Algorithms and Data Structures, Probability for Computer Science, and AI: Statistical Learning and
-          Prediction.</p>
+          decisions in the presence of uncertainty and variation: if every component of a type had exactly the same
+          lifetime, or human behaviour always led to the same decision, a single observation would reveal everything and
+          statistics would be unnecessary. Because that is never the case, we need methods that not only analyse the
+          results of experiments once carried out but also suggest how to run experiments efficiently — mitigating the
+          effects of variation to give a better chance of correct conclusions. This course is the foundation for later
+          subjects such as Algorithms and Data Structures, Probability for Computer Science, and AI: Statistical Learning
+          and Prediction.</p>
+        <p class="lead">Concretely, students learn to make inferences from <em>statistics</em> — functions of observed
+          data — proceeding from describing samples, to estimating parameters, to quantifying uncertainty with
+          confidence intervals, to deciding between hypotheses, and finally to comparing several groups with analysis of
+          variance. Python is used throughout as the working tool. The professor, <strong>Simón Isaza</strong>, holds a
+          PhD in mathematical research (Complutense University of Madrid, <em>cum laude</em>, on topology and the theory
+          of singularities) and has taught and researched at the National University of Colombia, Complutense and IE
+          University, with prior experience as a financial-risk consultant at KPMG. Office hours are on request by
+          e-mail.</p>
         <div class="meta">
           <div class="cell"><div class="k">Program</div><div class="v">BCSAI (SEP-2025)</div></div>
           <div class="cell"><div class="k">Course code</div><div class="v mono">FDA-N-CSAI.1.M.A</div></div>
@@ -223,6 +294,19 @@
           <div class="bar-row"><span class="lbl">Group work</span><span class="bar-track"><span class="bar-fill" style="width:6.7%"></span></span><span class="pct">6.7%</span></div>
           <div class="bar-row"><span class="lbl">Discussions</span><span class="bar-track"><span class="bar-fill" style="width:3.3%"></span></span><span class="pct">3.3%</span></div>
         </div>
+        <div class="meta" style="margin-top:0.9rem">
+          <div class="cell"><div class="k">Lectures</div><div class="v mono">45 h · 30%</div></div>
+          <div class="cell"><div class="k">Exercises · async · field work</div><div class="v mono">45 h · 30%</div></div>
+          <div class="cell"><div class="k">Individual studying</div><div class="v mono">45 h · 30%</div></div>
+          <div class="cell"><div class="k">Group work</div><div class="v mono">10 h · 6.7%</div></div>
+          <div class="cell"><div class="k">Discussions</div><div class="v mono">5 h · 3.3%</div></div>
+          <div class="cell"><div class="k">Total workload</div><div class="v mono">150 h · 100%</div></div>
+        </div>
+        <p class="note"><strong>How sessions work.</strong> The 30 sessions alternate <em>theory</em> blocks that
+          introduce each topic with <em>practice</em> blocks — by-hand problem solving, Python labs, and four graded
+          problem sets. Each topic is typically taught over two to three theory sessions and then consolidated in a
+          problem-solving session and a Python session, so concepts are seen, worked by hand, and implemented in code
+          before being assessed.</p>
       </section>
 
       <section class="demo" id="assessment">
@@ -236,12 +320,47 @@
           <div class="bar-row"><span class="lbl">Computer exam (Python)</span><span class="bar-track"><span class="bar-fill alt" style="width:20%"></span></span><span class="pct">20%</span></div>
           <div class="bar-row"><span class="lbl">Class participation</span><span class="bar-track"><span class="bar-fill alt" style="width:10%"></span></span><span class="pct">10%</span></div>
         </div>
-        <p class="note"><strong>Exams.</strong> The midterm (session 20, tentative) is closed-book, one double-sided A4
-          formula sheet allowed. The computer exam (session 29) is an open-book individual Python exam covering all
-          topics. The final exam (session 30) is comprehensive and closed-book, two double-sided A4 formula sheets
-          allowed. Problem sets are four BlackBoard multiple-answer tests solved by hand and/or in Python. Re-sits in
-          June/July are comprehensive, cap at 8.0, and require physical presence on campus; the 80% attendance rule
-          applies.</p>
+        <div class="twocol" style="margin-top:0.9rem">
+          <div>
+            <p class="subhead">Class participation — 10%</p>
+            <p class="sess-obj"><b>Deliverable:</b> active, sustained contributions across sessions.
+              <b>Evaluation:</b> assessed first on quantity (a threshold number of contributions sufficient for a
+              reliable judgment) and then on quality — depth of insight, rigorous use of evidence, consistency of
+              argument and realism, with comments that are concise, well-timed and engaged with the discussion.</p>
+            <p class="subhead" style="margin-top:0.7rem">Problem sets (×4) — 20%</p>
+            <p class="sess-obj"><b>Deliverable:</b> four problem sets (sessions 11, 18, 25, 28) of theory and practice
+              questions, solved by hand and/or in Python and submitted on BlackBoard as a <em>multiple-answer test</em>
+              where roughly one third of options are correct. <b>Evaluation:</b> reinforce understanding of complex
+              statistical concepts and prepare students for the midterm, computer and final exams.</p>
+            <p class="subhead" style="margin-top:0.7rem">Midterm exam — 20%</p>
+            <p class="sess-obj"><b>Deliverable:</b> exam in session 20 (tentative — may move to session 18 or 19),
+              via BlackBoard Ultra, covering Module 1 (Topics 1–4). <b>Evaluation:</b> format similar to the problem
+              sets; <em>closed book</em>; one double-sided A4 handwritten formula sheet and a simple (non-programmable,
+              non-graphical) calculator allowed; connect via the IE network or the grade is 0.</p>
+          </div>
+          <div>
+            <p class="subhead">Computer exam (Python) — 20%</p>
+            <p class="sess-obj"><b>Deliverable:</b> individual Python exam in session 29 — solve and discuss questions
+              covering all course topics. <b>Evaluation:</b> <em>open book</em>; assesses both understanding of the
+              material and competence in Python; communication is forbidden and the IE network is required.</p>
+            <p class="subhead" style="margin-top:0.7rem">Final exam — 30%</p>
+            <p class="sess-obj"><b>Deliverable:</b> comprehensive exam in session 30 covering every session, similar in
+              style to the problem sets with theory and practice questions; draws on the book, slides, problem sets and
+              class notes. <b>Evaluation:</b> <em>closed book</em>; two double-sided A4 handwritten formula sheets and a
+              simple calculator allowed.</p>
+            <p class="note" style="margin-top:0.7rem"><b>Pass rule.</b> A minimum of <b>3.5/10 in the final exam</b> is
+              required; below it the course is failed even if the weighted average exceeds 5.0.</p>
+            <p class="note"><b>Attendance.</b> Students who do not meet the <b>80% attendance</b> rule fail both the
+              ordinary and extraordinary calls for the year and must re-enrol the following year.</p>
+          </div>
+        </div>
+        <p class="note"><strong>Re-sit / re-take.</strong> Each course allows four chances across two academic years.
+          Students failing the ordinary call may re-sit in June/July with a single comprehensive exam (continuous
+          evaluation is not carried over), requiring physical presence in Segovia or Madrid; the re-sit grade is capped
+          at 8.0 (<em>notable</em>). The retake (3rd call) caps at 10.0; retakers must check the assigned professor's
+          criteria. Failing more than 18 ECTS in a year after the re-sits may lead to leaving the program. Grade appeals
+          require prior attendance at the exam review session. GenAI use in any assessment is academic misconduct and may
+          mean failing the assignment or the course.</p>
       </section>
 
       <!-- (d) PROGRAM -->
@@ -263,12 +382,31 @@
             <span class="mtitle">Sampling, estimation, intervals &amp; one-sample testing</span>
             <span class="mmeta">Topics 1–4 · sessions 1–20 · assessed in the midterm</span>
           </div>
+          <p class="module-intro">Module 1 builds the inferential pipeline from the ground up. It starts with how a
+            statistic behaves across random samples (sampling distributions and the Central Limit Theorem), uses that to
+            produce single best-guess values for parameters (point estimation), attaches a measure of precision to those
+            guesses (confidence intervals), and finally turns estimation into a decision procedure (one-sample hypothesis
+            tests). Everything here concerns a <em>single</em> population.</p>
+          <p class="outcomes-head">On completing Module 1 you should be able to:</p>
+          <ul class="outcomes">
+            <li>Describe and simulate the sampling distribution of a statistic and apply the Central Limit Theorem.</li>
+            <li>Compute point estimates by the method of moments and by maximum likelihood, and judge their quality.</li>
+            <li>Construct and interpret confidence intervals for a mean, proportion, variance and standard deviation.</li>
+            <li>Carry out z, t, proportion and variance tests for a single sample and reason about Type I/II error and power.</li>
+            <li>Implement one-sample estimation and testing in Python.</li>
+          </ul>
           <div class="timeline">
 
             <div class="sess theory">
               <div class="sess-head"><span class="sess-num">S1</span><span class="sess-kind">theory</span><span class="sess-title">Presentation &amp; Topic 1 — Sampling distributions</span></div>
               <p class="sess-obj">Course presentation, then the behaviour of statistics computed from random samples and how a sampling distribution arises.</p>
               <ul class="topics"><li>Statistics and their distributions</li><li>Random samples</li><li>Deriving a sampling distribution</li><li>Simulation experiments</li><li>Distribution of the sample mean</li><li>Central Limit Theorem</li><li>Distribution of a linear combination</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Statistic &amp; sampling distribution.</b> A statistic is any quantity computed from the sample; because the sample is random, the statistic is itself a random variable whose probability distribution is its sampling distribution.</div>
+                <div class="d"><b>Random sample.</b> Observations X₁,…,Xₙ that are independent and identically distributed (i.i.d.); independence is what lets us multiply densities and derive the distribution of functions of the sample.</div>
+                <div class="d"><b>Simulation experiments.</b> When a sampling distribution is hard to derive analytically, we approximate it by repeatedly drawing samples and recording the statistic each time.</div>
+                <div class="keyidea"><b>Key idea:</b> the same fixed formula (e.g. the sample mean) gives a <em>different</em> number on every sample — its spread across samples is what we must model before we can do inference.</div>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#clt">demo: CLT &amp; sampling distribution</a></div>
             </div>
 
@@ -276,6 +414,16 @@
               <div class="sess-head"><span class="sess-num">S2</span><span class="sess-kind">theory</span><span class="sess-title">Topic 1 — Sampling distributions (cont.)</span></div>
               <p class="sess-obj">Continue with the sample mean, the CLT and linear combinations; consolidate via simulation.</p>
               <ul class="topics"><li>Distribution of the sample mean</li><li>Central Limit Theorem</li><li>Distribution of a linear combination</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Distribution of the sample mean.</b> If the X's have mean μ and variance σ², then the sample mean is unbiased for μ and its variance shrinks like 1/n, so larger samples give tighter estimates.</div>
+                <div class="formula">E[X̄] = μ&nbsp;&nbsp;·&nbsp;&nbsp;Var(X̄) = σ²/n&nbsp;&nbsp;·&nbsp;&nbsp;SE(X̄) = σ/√n</div>
+                <div class="d"><b>Central Limit Theorem.</b> For large n the standardized sample mean is approximately standard normal regardless of the population shape (rule of thumb n &gt; 30).</div>
+                <div class="formula">(X̄ − μ) / (σ/√n) → N(0, 1) as n → ∞</div>
+                <div class="d"><b>Linear combination.</b> A weighted sum of independent normals is again normal, with mean and variance obtained by combining the parts.</div>
+                <div class="formula">E[Σ aᵢXᵢ] = Σ aᵢμᵢ&nbsp;&nbsp;·&nbsp;&nbsp;Var(Σ aᵢXᵢ) = Σ aᵢ²σᵢ²&nbsp;(indep.)</div>
+                <div class="keyidea"><b>Worked idea:</b> averaging n = 100 rolls of a fair die (μ = 3.5, σ ≈ 1.71) gives X̄ that is ≈ normal with SE = 1.71/√100 ≈ 0.171 — so X̄ lands within ±0.34 of 3.5 about 95% of the time.</div>
+                <p class="readmeta"><b>Reading:</b> Devore (DEV), <em>Probability &amp; Statistics for Engineering and the Sciences</em>, Ch. 5 §5.3 (statistics &amp; their distributions), §5.4 (distribution of the sample mean &amp; the CLT), §5.5 (distribution of a linear combination).</p>
+              </div>
               <div class="tags"><span class="tag read">Devore Ch. 5 §5.3–5.5</span><a class="tag demo-link" href="./index.html#clt">demo: CLT</a></div>
             </div>
 
@@ -283,6 +431,12 @@
               <div class="sess-head"><span class="sess-num">S3</span><span class="sess-kind">theory</span><span class="sess-title">Topic 2 — Point estimation</span></div>
               <p class="sess-obj">Use a sample to produce a single best-guess value (point estimate) for a population parameter.</p>
               <ul class="topics"><li>General concepts of point estimation</li><li>Methods of point estimation</li><li>Method of moments</li><li>Maximum likelihood estimation</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Point estimate vs. estimator.</b> An estimator θ̂ is a rule (a statistic); a point estimate is the single number it returns on the observed sample — an educated guess for the true parameter θ.</div>
+                <div class="d"><b>Good-estimator criteria.</b> We prefer estimators that are unbiased (right on average) and have small variance; mean squared error combines both.</div>
+                <div class="formula">MSE(θ̂) = Var(θ̂) + [bias(θ̂)]²&nbsp;&nbsp;·&nbsp;&nbsp;bias = E[θ̂] − θ</div>
+                <div class="keyidea"><b>Key idea:</b> there are many possible estimators for the same θ; the goal of this topic is to generate sensible ones (method of moments, MLE) and to compare how precisely they hit the target.</div>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#mle">demo: MLE</a></div>
             </div>
 
@@ -290,6 +444,13 @@
               <div class="sess-head"><span class="sess-num">S4</span><span class="sess-kind">theory</span><span class="sess-title">Topic 2 — Point estimation (cont.)</span></div>
               <p class="sess-obj">Develop the estimation methods and compare them.</p>
               <ul class="topics"><li>Method of moments</li><li>Maximum likelihood estimation</li><li>Properties of estimators</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Method of moments (MoM).</b> Set the first few population moments equal to the matching sample moments and solve for the parameters — simple and always defined.</div>
+                <div class="formula">E[Xᵏ] = (1/n) Σ Xᵢᵏ&nbsp;for k = 1, 2, …&nbsp;then solve for θ</div>
+                <div class="d"><b>Maximum likelihood (MLE).</b> Choose the parameter value that makes the observed data most probable by maximizing the (log-)likelihood.</div>
+                <div class="formula">θ̂ = argmaxθ&nbsp;ℓ(θ) = argmaxθ&nbsp;Σ ln f(Xᵢ; θ)</div>
+                <div class="keyidea"><b>Worked idea:</b> for a normal sample the MLE of μ is the sample mean X̄, and the MLE of σ² is the average squared deviation (1/n)Σ(Xᵢ − X̄)² — a biased but consistent estimate of variance.</div>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#mle">demo: MLE</a><a class="tag demo-link" href="./index.html#mom">demo: MoM vs MLE</a></div>
             </div>
 
@@ -297,6 +458,12 @@
               <div class="sess-head"><span class="sess-num">S5</span><span class="sess-kind">theory</span><span class="sess-title">Topic 2 — Point estimation (cont.)</span></div>
               <p class="sess-obj">Wrap up point estimation; contrast the sampling behaviour of competing estimators.</p>
               <ul class="topics"><li>Method of moments</li><li>Maximum likelihood estimation</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Comparing estimators.</b> When MoM and MLE disagree, we compare their sampling behaviour — bias, variance and efficiency — to decide which to trust.</div>
+                <div class="d"><b>Large-sample properties.</b> Under mild conditions the MLE is consistent (converges to θ), asymptotically unbiased, and asymptotically normal, which underpins later interval and test formulas.</div>
+                <div class="keyidea"><b>Key idea:</b> MLE is usually more efficient (smaller variance) than MoM and is the default in this course, but MoM is a handy starting point and sometimes the only closed-form option.</div>
+                <p class="readmeta"><b>Reading:</b> Devore Ch. 6 — general concepts of point estimation and methods of point estimation (MoM, MLE).</p>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#mom">demo: MoM vs MLE</a></div>
             </div>
 
@@ -304,6 +471,10 @@
               <div class="sess-head"><span class="sess-num">S6</span><span class="sess-kind practice">practice</span><span class="sess-title">Sampling distributions &amp; point estimation</span></div>
               <p class="sess-obj">Problem solving across Topics 1 and 2.</p>
               <ul class="topics"><li>Problem solving</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Goal.</b> Apply the CLT to compute probabilities about X̄, and derive MoM/MLE estimates for parameters of common distributions (normal, exponential, Poisson, Bernoulli) by hand.</div>
+                <div class="keyidea"><b>Key idea:</b> typical exercises ask "what is P(X̄ &gt; c)?" via standardization, and "what is θ̂?" via either matching moments or maximizing the log-likelihood — the two pillars of Module 1's first half.</div>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#clt">demo: CLT</a><a class="tag demo-link" href="./index.html#mom">demo: MoM vs MLE</a></div>
             </div>
 
@@ -311,6 +482,14 @@
               <div class="sess-head"><span class="sess-num">S7</span><span class="sess-kind">theory</span><span class="sess-title">Topic 3 — Statistical intervals based on a single sample</span></div>
               <p class="sess-obj">Report a range of plausible values — a confidence interval — to convey the precision of an estimate.</p>
               <ul class="topics"><li>Basic properties of confidence intervals</li><li>Large-sample CIs for a mean &amp; proportion</li><li>Intervals based on a Normal population</li><li>CIs for variance &amp; standard deviation</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>What a CI is.</b> A confidence interval is a random interval that, before sampling, has a stated probability (the confidence level, e.g. 95%) of containing the true parameter. Its width conveys the precision of the estimate.</div>
+                <div class="d"><b>Large-sample CI for a mean.</b> Built from the point estimate ± a critical value times the standard error.</div>
+                <div class="formula">x̄ ± z(α/2) · σ/√n&nbsp;&nbsp;(known σ)&nbsp;&nbsp;·&nbsp;&nbsp;95% → z = 1.96</div>
+                <div class="d"><b>Normal-population CI (σ unknown).</b> Uses the t distribution with n−1 degrees of freedom; for a proportion, a score/Wald interval based on p̂.</div>
+                <div class="formula">x̄ ± t(α/2, n−1) · s/√n&nbsp;&nbsp;·&nbsp;&nbsp;p̂ ± z(α/2)·√(p̂(1−p̂)/n)</div>
+                <div class="keyidea"><b>Key interpretation:</b> "95% confident" refers to the <em>procedure</em> — over many samples, 95% of the intervals it produces cover θ; a single computed interval either does or does not.</div>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#cov">demo: CI coverage</a><a class="tag demo-link" href="./index.html#ciw">demo: CI width</a></div>
             </div>
 
@@ -318,6 +497,13 @@
               <div class="sess-head"><span class="sess-num">S8</span><span class="sess-kind">theory</span><span class="sess-title">Topic 3 — Statistical intervals (cont.)</span></div>
               <p class="sess-obj">Continue with confidence intervals for means, proportions and variances.</p>
               <ul class="topics"><li>Large-sample CIs</li><li>Normal-based intervals</li><li>CIs for variance &amp; SD</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>CI for a variance / SD.</b> For a normal population the scaled sample variance follows a chi-square distribution, giving an asymmetric interval for σ².</div>
+                <div class="formula">( (n−1)s² / χ²(α/2,n−1),&nbsp; (n−1)s² / χ²(1−α/2,n−1) )</div>
+                <div class="d"><b>Width vs. confidence vs. n.</b> Higher confidence widens the interval; larger n narrows it (∝ 1/√n). This is the precision/confidence trade-off.</div>
+                <div class="keyidea"><b>Worked idea:</b> with n = 25, s = 4 and 95% confidence, the mean CI half-width is t(0.025,24)·4/√25 = 2.064·0.8 ≈ 1.65; quadrupling n to 100 roughly halves it.</div>
+                <p class="readmeta"><b>Reading:</b> Devore Ch. 7 — basic properties of CIs, large-sample CIs for a mean &amp; proportion, intervals based on a normal population, CIs for the variance and SD.</p>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#cov">demo: CI coverage</a><a class="tag demo-link" href="./index.html#ciw">demo: CI width</a></div>
             </div>
 
@@ -325,6 +511,10 @@
               <div class="sess-head"><span class="sess-num">S9</span><span class="sess-kind practice">practice</span><span class="sess-title">Statistical intervals based on a single sample</span></div>
               <p class="sess-obj">Problem solving on confidence intervals.</p>
               <ul class="topics"><li>Problem solving</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Goal.</b> Choose the correct interval (z vs. t vs. χ²) for the parameter and assumptions at hand, compute it, and interpret its meaning and width.</div>
+                <div class="keyidea"><b>Key idea:</b> the hardest part is not arithmetic but selection — is σ known? is the population normal? is the parameter a mean, proportion or variance? — which dictates the formula.</div>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#cov">demo: CI coverage</a></div>
             </div>
 
@@ -332,13 +522,21 @@
               <div class="sess-head"><span class="sess-num">S10</span><span class="sess-kind practice">practice</span><span class="sess-title">One-sample inference with Python</span></div>
               <p class="sess-obj">Implement one-sample estimation and intervals in Python.</p>
               <ul class="topics"><li>Python lab</li><li>One-sample inference</li></ul>
-              <div class="tags"><span class="tag read">Python</span><a class="tag demo-link" href="./index.html#ciw">demo: CI width</a></div>
+              <div class="sess-detail">
+                <div class="d"><b>Tooling.</b> Use NumPy/Pandas to summarize data and SciPy <span class="mono">stats</span> for distributions and intervals (e.g. <span class="mono">stats.t.interval</span>, <span class="mono">stats.norm.ppf</span>).</div>
+                <div class="keyidea"><b>Key idea:</b> the lab connects the hand formulas to code — compute x̄, s, the critical value and the interval, then check coverage by simulation to <em>see</em> the 95% guarantee emerge.</div>
+              </div>
+              <div class="tags"><span class="tag read">Python · NumPy/SciPy</span><a class="tag demo-link" href="./index.html#ciw">demo: CI width</a></div>
             </div>
 
             <div class="sess practice">
               <div class="sess-head"><span class="sess-num">S11</span><span class="sess-kind practice">practice</span><span class="sess-title">Problem Set 1</span></div>
               <p class="sess-obj">Assessed problem set covering Topics 1–3 (BlackBoard multiple-answer test).</p>
               <ul class="topics"><li>Problem Set 1</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Deliverable.</b> Theory + practice questions on sampling distributions, point estimation and confidence intervals, solved by hand and/or in Python and submitted on BlackBoard.</div>
+                <div class="keyidea"><b>Format:</b> multiple-answer test where roughly one third of the options are correct — partial reasoning matters, so work each item fully before selecting.</div>
+              </div>
               <div class="tags"><span class="tag read">assessed · 20% (with PS 2–4)</span></div>
             </div>
 
@@ -346,6 +544,14 @@
               <div class="sess-head"><span class="sess-num">S12</span><span class="sess-kind">theory</span><span class="sess-title">Topic 4 — Tests of hypotheses based on a single sample</span></div>
               <p class="sess-obj">Decide between two contradictory claims about a parameter — the core of hypothesis testing.</p>
               <ul class="topics"><li>Hypotheses &amp; test procedures</li><li>z tests for a population mean</li><li>One-sample t test</li><li>Tests for a proportion</li><li>Tests for a variance</li><li>Further aspects of testing</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Hypotheses.</b> State a null H₀ (the default claim) against an alternative Hₐ; the test decides whether the data give strong enough evidence against H₀.</div>
+                <div class="d"><b>z / t test for a mean.</b> Standardize the estimate under H₀ to form a test statistic and compare it with a critical value (or use the p-value).</div>
+                <div class="formula">z = (x̄ − μ₀)/(σ/√n)&nbsp;&nbsp;·&nbsp;&nbsp;t = (x̄ − μ₀)/(s/√n),&nbsp;df = n−1</div>
+                <div class="d"><b>p-value.</b> The probability, if H₀ is true, of a statistic at least as extreme as observed; reject H₀ when p ≤ α.</div>
+                <div class="d"><b>Proportion &amp; variance tests.</b> z test on p̂ for a proportion; a χ² statistic (n−1)s²/σ₀² for a variance.</div>
+                <div class="keyidea"><b>Key idea:</b> a test trades off two errors — Type I (reject a true H₀, controlled at α) and Type II (fail to reject a false H₀, probability β); 1 − β is the power.</div>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#onez">demo: one-sample z/t</a><a class="tag demo-link" href="./index.html#pval">demo: p-value</a><a class="tag demo-link" href="./index.html#power">demo: power</a></div>
             </div>
 
@@ -353,6 +559,13 @@
               <div class="sess-head"><span class="sess-num">S13</span><span class="sess-kind">theory</span><span class="sess-title">Topic 4 — Tests of hypotheses (cont.)</span></div>
               <p class="sess-obj">Continue with single-sample tests and the trade-offs between error types and power.</p>
               <ul class="topics"><li>z and t tests</li><li>Tests for proportion &amp; variance</li><li>Type I/II error &amp; power</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Power &amp; sample size.</b> Power rises with the true effect size, with n, and with α; designing a study means choosing n so power is adequate (often 0.8) at a relevant effect.</div>
+                <div class="formula">power = P(reject H₀ | Hₐ true) = 1 − β</div>
+                <div class="d"><b>One- vs. two-sided &amp; the CI–test duality.</b> A two-sided level-α test rejects H₀: μ = μ₀ exactly when μ₀ falls outside the (1−α) confidence interval.</div>
+                <div class="keyidea"><b>Worked idea:</b> testing H₀: μ = 100 with x̄ = 104, s = 10, n = 25 gives t = 4/(10/5) = 2.0; against t(0.025,24) = 2.064 this just fails to reject at 5% — a borderline result the p-value makes precise.</div>
+                <p class="readmeta"><b>Reading:</b> Devore Ch. 8 — hypotheses &amp; test procedures, z tests for a mean, the one-sample t test, tests for a proportion and a variance, and further aspects of testing (errors, power, p-values).</p>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#pval">demo: p-value</a><a class="tag demo-link" href="./index.html#power">demo: power</a></div>
             </div>
 
@@ -360,6 +573,10 @@
               <div class="sess-head"><span class="sess-num">S14</span><span class="sess-kind practice">practice</span><span class="sess-title">Tests of hypotheses based on a single sample</span></div>
               <p class="sess-obj">Problem solving on one-sample hypothesis tests.</p>
               <ul class="topics"><li>Problem solving</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Goal.</b> Set up H₀/Hₐ, pick the right statistic (z, t, proportion-z, χ²), compute it, find the p-value or critical region, and state a conclusion in context.</div>
+                <div class="keyidea"><b>Key idea:</b> common traps are one- vs. two-sided alternatives and confusing "fail to reject H₀" with "H₀ is true" — absence of evidence is not evidence of absence.</div>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#onez">demo: one-sample z/t</a></div>
             </div>
 
@@ -367,13 +584,26 @@
               <div class="sess-head"><span class="sess-num">S15</span><span class="sess-kind practice">practice</span><span class="sess-title">Hypothesis testing with Python — one sample</span></div>
               <p class="sess-obj">Run one-sample hypothesis tests in Python.</p>
               <ul class="topics"><li>Python lab</li><li>One-sample hypothesis testing</li></ul>
-              <div class="tags"><span class="tag read">Python</span><a class="tag demo-link" href="./index.html#onez">demo: one-sample z/t</a></div>
+              <div class="sess-detail">
+                <div class="d"><b>Tooling.</b> SciPy <span class="mono">stats.ttest_1samp</span> for the t test, <span class="mono">proportions_ztest</span> (statsmodels) for proportions, plus manual statistics to confirm the library output.</div>
+                <div class="keyidea"><b>Key idea:</b> reading SciPy's returned statistic and p-value correctly — and matching it to a hand calculation — is the skill the computer exam later rewards.</div>
+              </div>
+              <div class="tags"><span class="tag read">Python · SciPy/statsmodels</span><a class="tag demo-link" href="./index.html#onez">demo: one-sample z/t</a></div>
             </div>
 
             <div class="sess theory">
               <div class="sess-head"><span class="sess-num">S16</span><span class="sess-kind">theory</span><span class="sess-title">Topic 5 — Inferences based on two samples</span></div>
               <p class="sess-obj">Confidence intervals and tests for a difference between two population parameters.</p>
               <ul class="topics"><li>z tests &amp; CIs for a difference of means</li><li>Two-sample t test &amp; CI</li><li>Analysis of paired data</li><li>Difference of proportions</li><li>Ratio of two variances</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Difference of means.</b> Inference targets μ₁ − μ₂; the standard error combines both samples' variability.</div>
+                <div class="formula">t = (x̄₁ − x̄₂)/√(s₁²/n₁ + s₂²/n₂)&nbsp;(Welch two-sample t)</div>
+                <div class="d"><b>Difference of proportions.</b> z statistic on p̂₁ − p̂₂, pooling under H₀ for the test.</div>
+                <div class="formula">z = (p̂₁ − p̂₂)/√( p̂(1−p̂)(1/n₁ + 1/n₂) )</div>
+                <div class="d"><b>Ratio of variances.</b> Compares σ₁² and σ₂² via an F statistic equal to the ratio of sample variances.</div>
+                <div class="formula">F = s₁²/s₂²,&nbsp;df = (n₁−1, n₂−1)</div>
+                <div class="keyidea"><b>Key idea:</b> "independent samples" (two separate groups) need a two-sample test, whereas matched observations need the paired test introduced next — choosing wrongly inflates the error.</div>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#twot">demo: two-sample t</a><a class="tag demo-link" href="./index.html#paired">demo: paired</a></div>
             </div>
 
@@ -381,6 +611,13 @@
               <div class="sess-head"><span class="sess-num">S17</span><span class="sess-kind">theory</span><span class="sess-title">Topic 5 — Inferences based on two samples (cont.)</span></div>
               <p class="sess-obj">Continue with two-sample tests, paired data and variance comparisons.</p>
               <ul class="topics"><li>Two-sample t test &amp; CI</li><li>Analysis of paired data</li><li>Two population variances</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Paired data.</b> When each unit yields two measurements (before/after, matched pairs), analyse the differences dᵢ = X₁ᵢ − X₂ᵢ with a one-sample t test on d̄.</div>
+                <div class="formula">t = d̄ / (s_d/√n),&nbsp;df = n−1</div>
+                <div class="d"><b>Why pairing helps.</b> Removing unit-to-unit variability shrinks the standard error, so a paired design is more powerful than two independent samples of the same size when the pairing is informative.</div>
+                <div class="keyidea"><b>Worked idea:</b> measuring blood pressure on the same 20 patients before and after a drug, you test whether the mean difference d̄ differs from 0 — not whether two independent group means differ.</div>
+                <p class="readmeta"><b>Reading:</b> Devore Ch. 9 — z and t procedures for a difference of means, the two-sample t test &amp; CI, analysis of paired data, difference of proportions, and the F test for two variances.</p>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#twot">demo: two-sample t</a><a class="tag demo-link" href="./index.html#paired">demo: paired</a></div>
             </div>
 
@@ -388,6 +625,10 @@
               <div class="sess-head"><span class="sess-num">S18</span><span class="sess-kind practice">practice</span><span class="sess-title">Problem Set 2</span></div>
               <p class="sess-obj">Assessed problem set covering one- and two-sample inference.</p>
               <ul class="topics"><li>Problem Set 2</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Deliverable.</b> BlackBoard multiple-answer test on one-sample testing (Topic 4) and two-sample inference (Topic 5), by hand and/or in Python.</div>
+                <div class="keyidea"><b>Key idea:</b> emphasises correctly identifying the design (one sample, two independent samples, or paired) before computing — the recurring decision of this module.</div>
+              </div>
               <div class="tags"><span class="tag read">assessed · part of 20%</span></div>
             </div>
 
@@ -395,6 +636,10 @@
               <div class="sess-head"><span class="sess-num">S19</span><span class="sess-kind">theory</span><span class="sess-title">Topic 5 — Inferences based on two samples (cont.)</span></div>
               <p class="sess-obj">Final two-sample session before the midterm.</p>
               <ul class="topics"><li>Difference of means</li><li>Paired data</li><li>Difference of proportions</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Consolidation.</b> Pull together pooled vs. unpooled (Welch) t tests, paired analysis, proportion and variance comparisons, and the choice of one- vs. two-sided alternatives.</div>
+                <div class="keyidea"><b>Key idea:</b> this session doubles as midterm review for Topics 1–4 — sampling distributions, estimation, intervals and one-sample testing are the examinable core.</div>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#twot">demo: two-sample t</a></div>
             </div>
 
@@ -402,6 +647,10 @@
               <div class="sess-head"><span class="sess-num">S20</span><span class="sess-kind exam">exam</span><span class="sess-title">Midterm exam — Module 1 (Topics 1, 2, 3 &amp; 4)</span></div>
               <p class="sess-obj">Closed-book exam via BlackBoard Ultra. Date tentative — may fall in session 18 or 19 depending on class pace. One double-sided A4 formula sheet and a simple calculator allowed.</p>
               <ul class="topics"><li>Sampling distributions</li><li>Point estimation</li><li>Confidence intervals</li><li>One-sample testing</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Scope &amp; format.</b> Module 1 only (Topics 1–4); style similar to the problem sets. Closed book; one handwritten double-sided A4 formula sheet and a simple (non-programmable, non-graphical) calculator are permitted.</div>
+                <div class="keyidea"><b>Rules:</b> no phones/tablets/laptops; communication forbidden; you must connect via the IE network or the grade is 0.</div>
+              </div>
               <div class="tags"><span class="tag read">assessed · 20%</span></div>
             </div>
 
@@ -415,12 +664,30 @@
             <span class="mtitle">Two-sample inference, ANOVA &amp; comprehensive exams</span>
             <span class="mmeta">Topics 5–7 · sessions 21–30</span>
           </div>
+          <p class="module-intro">Module 2 generalises inference from one population to many. It first compares
+            <em>two</em> populations (differences of means, paired data, differences of proportions, ratios of
+            variances), then compares <em>several</em> groups at once with single-factor ANOVA, and finally studies the
+            simultaneous effect of two or more factors with multifactor ANOVA. The module closes with the comprehensive
+            computer and final exams.</p>
+          <p class="outcomes-head">On completing Module 2 you should be able to:</p>
+          <ul class="outcomes">
+            <li>Build confidence intervals and tests for a difference between two population means and proportions.</li>
+            <li>Recognise paired designs and analyse them with the appropriate paired procedure.</li>
+            <li>Compare two variances and set up an F-based comparison.</li>
+            <li>Decompose total variability and run a single-factor ANOVA, including multiple comparisons.</li>
+            <li>Extend ANOVA to two factors, including fixed-, random- and mixed-effects and randomized block designs.</li>
+            <li>Carry out all of the above in Python and interpret the output.</li>
+          </ul>
           <div class="timeline">
 
             <div class="sess practice">
               <div class="sess-head"><span class="sess-num">S21</span><span class="sess-kind practice">practice</span><span class="sess-title">Inference based on two samples</span></div>
               <p class="sess-obj">Problem solving on two-sample inference.</p>
               <ul class="topics"><li>Problem solving</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Goal.</b> Work through difference-of-means, paired, difference-of-proportions and variance-ratio problems, deciding pooled vs. Welch and one- vs. two-sided in each.</div>
+                <div class="keyidea"><b>Key idea:</b> the variance-ratio (F) test also doubles as the assumption check for the pooled two-sample t test — equal variances justify pooling.</div>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#twot">demo: two-sample t</a><a class="tag demo-link" href="./index.html#paired">demo: paired</a></div>
             </div>
 
@@ -428,13 +695,25 @@
               <div class="sess-head"><span class="sess-num">S22</span><span class="sess-kind practice">practice</span><span class="sess-title">Inference based on two samples with Python</span></div>
               <p class="sess-obj">Two-sample tests and confidence intervals implemented in Python.</p>
               <ul class="topics"><li>Python lab</li><li>Two-sample inference</li></ul>
-              <div class="tags"><span class="tag read">Python</span><a class="tag demo-link" href="./index.html#twot">demo: two-sample t</a></div>
+              <div class="sess-detail">
+                <div class="d"><b>Tooling.</b> SciPy <span class="mono">ttest_ind</span> (set <span class="mono">equal_var</span> for pooled vs. Welch), <span class="mono">ttest_rel</span> for paired data, and <span class="mono">f_oneway</span> preview before ANOVA.</div>
+                <div class="keyidea"><b>Key idea:</b> the <span class="mono">equal_var</span> flag encodes the pooled/Welch choice — getting it right in code mirrors the by-hand decision.</div>
+              </div>
+              <div class="tags"><span class="tag read">Python · SciPy</span><a class="tag demo-link" href="./index.html#twot">demo: two-sample t</a></div>
             </div>
 
             <div class="sess theory">
               <div class="sess-head"><span class="sess-num">S23</span><span class="sess-kind">theory</span><span class="sess-title">Topic 6 — Analysis of variance: single factor</span></div>
               <p class="sess-obj">One-way ANOVA: comparing quantitative responses across more than two populations or treatments.</p>
               <ul class="topics"><li>Single-factor ANOVA</li><li>Multiple comparisons in ANOVA</li><li>More on single-factor ANOVA</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>What ANOVA does.</b> Tests whether k ≥ 2 group means are all equal by comparing variability <em>between</em> groups to variability <em>within</em> groups.</div>
+                <div class="formula">F = MSTr / MSE = SSTr/(k−1) ÷ SSE/(N−k)</div>
+                <div class="d"><b>Sum-of-squares identity.</b> Total variability splits into a treatment (between) part and an error (within) part — the heart of "analysis of variance".</div>
+                <div class="formula">SST = SSTr + SSE</div>
+                <div class="d"><b>Multiple comparisons.</b> A significant F says "some means differ"; methods such as Tukey's HSD then locate <em>which</em> pairs differ while controlling the family-wise error rate.</div>
+                <div class="keyidea"><b>Key idea:</b> running many pairwise t tests inflates Type I error, so ANOVA gives one omnibus test first; large F (small p) means the between-group spread is too big to be chance.</div>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#anova">demo: one-way ANOVA (F = MSB/MSE)</a></div>
             </div>
 
@@ -442,13 +721,22 @@
               <div class="sess-head"><span class="sess-num">S24</span><span class="sess-kind practice">practice</span><span class="sess-title">ANOVA single factor with Python</span></div>
               <p class="sess-obj">Run a one-way ANOVA in Python and interpret the F test.</p>
               <ul class="topics"><li>Python lab</li><li>Single-factor ANOVA</li></ul>
-              <div class="tags"><span class="tag read">Python</span><a class="tag demo-link" href="./index.html#anova">demo: ANOVA</a></div>
+              <div class="sess-detail">
+                <div class="d"><b>Tooling.</b> SciPy <span class="mono">f_oneway</span> or statsmodels <span class="mono">ols(...).fit()</span> + <span class="mono">anova_lm</span> for a full table; <span class="mono">pairwise_tukeyhsd</span> for post-hoc comparisons.</div>
+                <div class="d"><b>Reading the table.</b> Identify SSTr, SSE, df, MS, the F value and p, and check assumptions (independence, normal residuals, equal variances).</div>
+                <div class="keyidea"><b>Reading:</b> Devore Ch. 10 — single-factor ANOVA, multiple comparisons, and further topics on one-way ANOVA.</div>
+              </div>
+              <div class="tags"><span class="tag read">Python · statsmodels</span><a class="tag demo-link" href="./index.html#anova">demo: ANOVA</a></div>
             </div>
 
             <div class="sess practice">
               <div class="sess-head"><span class="sess-num">S25</span><span class="sess-kind practice">practice</span><span class="sess-title">Problem Set 3</span></div>
               <p class="sess-obj">Assessed problem set covering two-sample inference and single-factor ANOVA.</p>
               <ul class="topics"><li>Problem Set 3</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Deliverable.</b> BlackBoard multiple-answer test spanning Topic 5 (two samples) and Topic 6 (one-way ANOVA), by hand and/or in Python.</div>
+                <div class="keyidea"><b>Key idea:</b> tests the link between a two-group t test and a two-group ANOVA — with k = 2 groups, F = t², so the two procedures agree.</div>
+              </div>
               <div class="tags"><span class="tag read">assessed · part of 20%</span></div>
             </div>
 
@@ -456,6 +744,15 @@
               <div class="sess-head"><span class="sess-num">S26</span><span class="sess-kind">theory</span><span class="sess-title">Topic 7 — Multifactor analysis of variance</span></div>
               <p class="sess-obj">Extend ANOVA to two or more simultaneous factors.</p>
               <ul class="topics"><li>Two-factor ANOVA</li><li>The fixed-effects model</li><li>Randomized block experiments</li><li>Random &amp; mixed-effects models</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Two-factor ANOVA.</b> Two factors (A, B) act at once; total variability splits into main effects, an interaction, and error.</div>
+                <div class="formula">SST = SSA + SSB + SSAB + SSE</div>
+                <div class="d"><b>Interaction.</b> A significant A×B interaction means the effect of one factor depends on the level of the other, so main effects can't be read in isolation.</div>
+                <div class="d"><b>Fixed / random / mixed effects.</b> Factor levels may be deliberately chosen (fixed) or sampled from a population of levels (random); a mix gives a mixed model — this changes which mean squares form the F denominators.</div>
+                <div class="d"><b>Randomized block design.</b> Blocking groups similar units to remove a nuisance source of variation, increasing precision much as pairing did for two samples.</div>
+                <div class="keyidea"><b>Key idea:</b> always inspect the interaction first; only if it is negligible do the individual factor main-effect tests have a clean interpretation.</div>
+                <p class="readmeta"><b>Reading:</b> Devore Ch. 11 — two-factor ANOVA, the fixed-effects model, randomized block experiments, and models with random and mixed effects.</p>
+              </div>
               <div class="tags"><a class="tag demo-link" href="./index.html#anova">demo: ANOVA (variance decomposition)</a></div>
             </div>
 
@@ -463,13 +760,21 @@
               <div class="sess-head"><span class="sess-num">S27</span><span class="sess-kind practice">practice</span><span class="sess-title">ANOVA multifactor with Python</span></div>
               <p class="sess-obj">Fit and interpret a multifactor ANOVA in Python.</p>
               <ul class="topics"><li>Python lab</li><li>Two-factor ANOVA</li></ul>
-              <div class="tags"><span class="tag read">Python</span><a class="tag demo-link" href="./index.html#anova">demo: ANOVA</a></div>
+              <div class="sess-detail">
+                <div class="d"><b>Tooling.</b> statsmodels formula API — e.g. <span class="mono">ols('y ~ C(A) * C(B)', data).fit()</span> then <span class="mono">anova_lm(model, typ=2)</span> — where the <span class="mono">*</span> includes both main effects and the interaction.</div>
+                <div class="keyidea"><b>Key idea:</b> interaction plots (group means across one factor, lines per level of the other) make a significant A×B term visible as non-parallel lines.</div>
+              </div>
+              <div class="tags"><span class="tag read">Python · statsmodels</span><a class="tag demo-link" href="./index.html#anova">demo: ANOVA</a></div>
             </div>
 
             <div class="sess practice">
               <div class="sess-head"><span class="sess-num">S28</span><span class="sess-kind practice">practice</span><span class="sess-title">Problem Set 4</span></div>
               <p class="sess-obj">Final assessed problem set covering multifactor ANOVA.</p>
               <ul class="topics"><li>Problem Set 4</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Deliverable.</b> BlackBoard multiple-answer test on Topic 7 — two-factor ANOVA, interaction, fixed/random/mixed effects and blocking — by hand and/or in Python.</div>
+                <div class="keyidea"><b>Key idea:</b> the four problem sets together (PS1–PS4) make up the 20% problem-set component and are the best preparation for the computer and final exams.</div>
+              </div>
               <div class="tags"><span class="tag read">assessed · completes the 20%</span></div>
             </div>
 
@@ -477,6 +782,10 @@
               <div class="sess-head"><span class="sess-num">S29</span><span class="sess-kind exam">exam</span><span class="sess-title">Computer exam with Python</span></div>
               <p class="sess-obj">Individual, open-book Python exam: solve and discuss questions covering all topics of the course, evaluating both understanding and Python use.</p>
               <ul class="topics"><li>Open book · Python</li><li>All topics</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Scope &amp; format.</b> All Topics 1–7, taken individually. Open book; you write and run Python and explain your reasoning, so it rewards the labs in sessions 10, 15, 22, 24 and 27.</div>
+                <div class="keyidea"><b>Rules:</b> communication forbidden; you must connect via the IE network or the grade is 0.</div>
+              </div>
               <div class="tags"><span class="tag read">assessed · 20%</span></div>
             </div>
 
@@ -484,15 +793,126 @@
               <div class="sess-head"><span class="sess-num">S30</span><span class="sess-kind exam">exam</span><span class="sess-title">Final exam</span></div>
               <p class="sess-obj">Comprehensive closed-book exam covering all content from the first to the last session, similar in style to the problem sets with theory and practice questions. Minimum 3.5 required to pass; two double-sided A4 formula sheets and a simple calculator allowed.</p>
               <ul class="topics"><li>All topics 1–7</li><li>Closed book</li></ul>
+              <div class="sess-detail">
+                <div class="d"><b>Scope &amp; sources.</b> Every session; draws on the book, the slides, the problem sets and class notes. Closed book; two handwritten double-sided A4 formula sheets and a simple (non-programmable, non-graphical) calculator permitted.</div>
+                <div class="keyidea"><b>Pass rule:</b> you need at least 3.5/10 here — fall short and you fail the course even if your weighted average exceeds 5.0. Re-sits (June/July) are a single comprehensive exam capped at 8.0.</div>
+              </div>
               <div class="tags"><span class="tag read">assessed · 30% · min. 3.5 to pass</span></div>
             </div>
 
           </div>
         </div>
 
-        <p class="note"><strong>Key bibliography.</strong> Jay L. Devore, <em>Probability and Statistics for Engineering
-          and the Sciences</em> (DEV) — e.g. Chapter 5 §5.3–5.5 for sampling distributions — is the primary reference,
-          complemented by the course slides, problem sets and class notes.</p>
+        <p class="note"><strong>Bibliography &amp; key concepts below.</strong> Each topic above is anchored in the primary
+          textbook; the glossary and annotated bibliography that follow collect the recurring terms and reading map for
+          the whole course.</p>
+      </section>
+
+      <!-- (e) KEY CONCEPTS GLOSSARY -->
+      <section class="demo" id="glossary">
+        <h2>Key concepts</h2>
+        <p class="cap">A quick-reference glossary of the terms that recur throughout the program — useful when building
+          your A4 formula sheet for the exams.</p>
+        <dl class="glossary">
+          <div>
+            <dt>Population &amp; parameter</dt>
+            <dd>The full set of units of interest and a fixed numerical feature of it (e.g. mean μ, proportion p, variance σ²) that we try to learn about.</dd>
+            <dt>Random sample</dt>
+            <dd>Observations X₁,…,Xₙ drawn independently and identically (i.i.d.) from the population.</dd>
+            <dt>Statistic</dt>
+            <dd>Any quantity computed from the sample (e.g. X̄, s²); being a function of random data, it is itself random.</dd>
+            <dt>Sampling distribution</dt>
+            <dd>The probability distribution of a statistic across all possible samples — the object inference is built on.</dd>
+            <dt>Standard error</dt>
+            <dd>The standard deviation of a statistic's sampling distribution; for the mean, <span class="formula">SE = σ/√n</span></dd>
+            <dt>Central Limit Theorem</dt>
+            <dd>For large n the standardized sample mean is approximately N(0,1) whatever the population shape.</dd>
+            <dt>Point estimator / estimate</dt>
+            <dd>A rule θ̂ for guessing a parameter, and the single value it returns on the observed sample.</dd>
+            <dt>Bias &amp; unbiasedness</dt>
+            <dd>bias = E[θ̂] − θ; an estimator is unbiased when its expected value equals the parameter.</dd>
+            <dt>Method of moments (MoM)</dt>
+            <dd>Estimate parameters by equating sample moments to population moments and solving.</dd>
+            <dt>Maximum likelihood (MLE)</dt>
+            <dd>Estimate by maximizing the likelihood of the observed data; usually efficient and asymptotically normal.</dd>
+            <dt>Consistency</dt>
+            <dd>An estimator is consistent if it converges to the true parameter as n grows.</dd>
+            <dt>Confidence interval</dt>
+            <dd>A random interval covering the parameter with a stated long-run probability (the confidence level).</dd>
+            <dt>Confidence level</dt>
+            <dd>1 − α, the proportion of such intervals that contain the parameter over repeated sampling (e.g. 95%).</dd>
+          </div>
+          <div>
+            <dt>Null &amp; alternative hypotheses</dt>
+            <dd>H₀ is the default claim; Hₐ is the competing claim the data may support.</dd>
+            <dt>Test statistic</dt>
+            <dd>A standardized quantity (z, t, χ², F) measuring how far data fall from H₀.</dd>
+            <dt>p-value</dt>
+            <dd>Probability, under H₀, of a result at least as extreme as observed; reject H₀ when p ≤ α.</dd>
+            <dt>Significance level α</dt>
+            <dd>The chosen Type I error rate — the probability of rejecting a true H₀.</dd>
+            <dt>Type I &amp; Type II error</dt>
+            <dd>Rejecting a true H₀ (prob. α) vs. failing to reject a false H₀ (prob. β).</dd>
+            <dt>Power</dt>
+            <dd>1 − β, the probability of correctly rejecting a false H₀; rises with effect size, n and α.</dd>
+            <dt>t distribution</dt>
+            <dd>Bell-shaped, heavier-tailed than normal, used when σ is estimated by s; indexed by degrees of freedom.</dd>
+            <dt>Degrees of freedom</dt>
+            <dd>The number of independent pieces of information available to estimate variability (e.g. n − 1).</dd>
+            <dt>Paired data</dt>
+            <dd>Two measurements on the same unit; analysed through the within-pair differences.</dd>
+            <dt>ANOVA</dt>
+            <dd>Analysis of variance — compares group means by partitioning total variability into between- and within-group parts.</dd>
+            <dt>F statistic</dt>
+            <dd>Ratio of two variance estimates (MSTr/MSE in ANOVA, s₁²/s₂² for two variances); large F signals real differences.</dd>
+            <dt>Interaction</dt>
+            <dd>In multifactor ANOVA, when the effect of one factor depends on the level of another.</dd>
+            <dt>Fixed vs. random effects</dt>
+            <dd>Factor levels deliberately chosen (fixed) vs. sampled from a population of levels (random); a mix is a mixed model.</dd>
+            <dt>Multiple comparisons</dt>
+            <dd>Post-hoc procedures (e.g. Tukey's HSD) that locate which group means differ while controlling family-wise error.</dd>
+          </div>
+        </dl>
+      </section>
+
+      <!-- (f) ANNOTATED BIBLIOGRAPHY -->
+      <section class="demo" id="bibliography">
+        <h2>Annotated bibliography</h2>
+        <p class="cap">The course is anchored on Devore's textbook (referenced as <strong>DEV</strong> in the syllabus),
+          supported by the slides, problem sets and class notes. Chapter mapping below indicates where each source feeds
+          the program.</p>
+        <ul class="biblio">
+          <li><span class="ref">Jay L. Devore — <em>Probability and Statistics for Engineering and the Sciences</em> (DEV).</span>
+            The primary textbook for every topic: theory, worked examples and exercises that mirror the problem sets and exams.
+            <span class="where">all sessions · primary reference</span></li>
+          <li><span class="ref">DEV, Chapter 5 §5.3–5.5 — Statistics &amp; their distributions; sampling distribution of the mean &amp; CLT; linear combinations.</span>
+            The explicitly suggested reading for Topic 1.
+            <span class="where">Topic 1 · sessions 1–2, 6</span></li>
+          <li><span class="ref">DEV, Chapter 6 — Point estimation.</span>
+            General concepts, the method of moments and maximum likelihood, and estimator properties.
+            <span class="where">Topic 2 · sessions 3–6</span></li>
+          <li><span class="ref">DEV, Chapter 7 — Statistical intervals for a single sample.</span>
+            Confidence intervals for a mean, proportion, variance and standard deviation.
+            <span class="where">Topic 3 · sessions 7–10</span></li>
+          <li><span class="ref">DEV, Chapter 8 — Tests of hypotheses (single sample).</span>
+            z and t tests, proportion and variance tests, errors, power and p-values.
+            <span class="where">Topic 4 · sessions 12–15</span></li>
+          <li><span class="ref">DEV, Chapter 9 — Inferences based on two samples.</span>
+            Differences of means and proportions, paired data, and comparison of two variances.
+            <span class="where">Topic 5 · sessions 16–22</span></li>
+          <li><span class="ref">DEV, Chapter 10 — Single-factor ANOVA.</span>
+            One-way ANOVA, the F test and multiple-comparison procedures.
+            <span class="where">Topic 6 · sessions 23–25</span></li>
+          <li><span class="ref">DEV, Chapter 11 — Multifactor ANOVA.</span>
+            Two-factor ANOVA, fixed/random/mixed effects and randomized block designs.
+            <span class="where">Topic 7 · sessions 26–28</span></li>
+          <li><span class="ref">Course slides, problem sets &amp; class notes.</span>
+            Companion materials; the final exam may draw on all of them, so the syllabus advises studying them alongside the book.
+            <span class="where">all sessions · exam preparation</span></li>
+          <li><span class="ref">Python ecosystem — NumPy, Pandas, SciPy <span class="mono">stats</span>, statsmodels.</span>
+            The working tools for every practice/Python lab and the open-book computer exam.
+            <span class="where">sessions 10, 15, 22, 24, 27, 29</span></li>
+        </ul>
       </section>
     </main>
 
