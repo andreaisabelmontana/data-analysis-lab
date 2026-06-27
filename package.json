@@ -1,0 +1,11 @@
+{
+  "name": "data-analysis-lab",
+  "version": "1.0.0",
+  "description": "Tested numerical cores behind the data-analysis-lab demos (summary statistics, correlation, regression, scaling, grouping, distributions and inference).",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  },
+  "license": "MIT"
+}
