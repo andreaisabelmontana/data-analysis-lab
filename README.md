@@ -56,63 +56,22 @@ Quantiles use linear interpolation between order statistics (R-7 / NumPy default
 - distribution tails match textbook quantiles (`normCdf(1.96)≈0.975`, `t_{0.975,10}≈2.228`, `χ²_{0.95,1}≈3.841`)
 - the seeded RNG (`makeRng`) is deterministic and reproducible across calls
 
-## Run
+## Run & test
 
-Open `index.html` in any browser, or serve the folder statically. No dependencies, no build.
+Open `index.html` in any browser, or serve the folder statically — no dependencies, no build.
 
-## Test
-
-Node 24+, no npm install (uses `node:test` + `node:assert` only):
+Tests use Node 24+ with the built-in runner only (`node:test` + `node:assert`, no npm install):
 
 ```
 node --test
 ```
 
-```
-✔ correlation is +1 for perfectly linear data
-✔ correlation is -1 for perfectly anti-linear data
-✔ correlation stays within [-1, 1] for noisy data
-✔ covariance has the expected sign and value
-✔ regression recovers a known slope, intercept and R^2 = 1
-✔ R^2 drops below 1 when residuals are nonzero
-✔ standard normal pdf and cdf hit known points
-✔ normInv inverts normCdf
-✔ two-sided t tail matches the normal in the large-df limit
-✔ tInv returns the textbook 95% critical value
-✔ chi-square upper tail at known quantiles
-✔ F upper tail is a probability in (0,1)
-✔ groupBy partitions rows by key
-✔ sum aggregation totals each group correctly
-✔ mean aggregation averages each group correctly
-✔ count aggregation counts members per group
-✔ aggregate works with min/max reducers
-✔ CI half-width = t * s / sqrt(n)
-✔ one-sample z-test rejects a clear effect
-✔ one-sample t-test fails to reject a tiny effect
-✔ two-sample pooled and Welch agree when sizes and variances match
-✔ paired t-test on a consistent shift is significant
-✔ ANOVA F is large when group means are far apart
-✔ ANOVA on identical groups gives F near 0 and large p
-✔ chi-square independence: associated table rejects, uniform does not
-✔ seeded RNG is deterministic and reproducible
-✔ seeded randn has roughly zero mean over many draws
-✔ mean matches hand value
-✔ sample variance and std use the n-1 divisor
-✔ median is the R-7 interpolated 50th percentile
-✔ quartiles match hand-computed R-7 values
-✔ quantile endpoints return the extremes
-✔ mode returns the most frequent value
-✔ 1.5*IQR rule flags a known outlier and nothing else
-✔ no outliers in tight, symmetric data
-✔ summarize bundles the descriptive set
-✔ min-max scales into [0,1] with 0 and 1 attained
-✔ min-max maps a constant series to zeros
-✔ z-score yields zero mean and unit sample variance
-✔ binIndex buckets values into the correct equal-width bin
-✔ histogram counts assign every value to a bin
-ℹ tests 41
-ℹ pass 41
-ℹ fail 0
-```
+41 tests cover the cores listed above (summary stats, correlation/regression, transforms, group-by, distribution tails, the seeded RNG, and every inference routine).
+
+## Coursework
+
+Hands-on apps I built for the course, both live in the browser:
+[VigiView](https://andreaisabelmontana.github.io/vigiview/) (adverse drug-event explorer) ·
+[ShopSmart](https://andreaisabelmontana.github.io/shopsmart/) (cheapest-basket price comparison).
 
 Part of the *-lab series: [discrete-math-lab](https://github.com/andreaisabelmontana/discrete-math-lab) · [prob-stats-lab](https://github.com/andreaisabelmontana/prob-stats-lab) · [business-lab](https://github.com/andreaisabelmontana/business-lab) · [research-methods-lab](https://github.com/andreaisabelmontana/research-methods-lab) · [big-history-lab](https://github.com/andreaisabelmontana/big-history-lab)
