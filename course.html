@@ -204,6 +204,24 @@
       .wtable th { background: var(--paper); color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; font-size: 0.68rem; }
       .wtable td:first-child, .wtable th:first-child { text-align: left; color: var(--ink-soft); }
       .wtable td.hot { color: var(--accent); font-weight: 700; }
+
+      /* practice problems */
+      .pp { margin-top: 0.8rem; border: 1px solid var(--rule); border-radius: 8px; padding: 0.7rem 0.85rem; background: var(--bg); }
+      .pp:first-of-type { margin-top: 0.5rem; }
+      .pp .ppq { font-size: 0.86rem; color: var(--ink); line-height: 1.5; }
+      .pp .ppq .qn { font-family: var(--font-mono); font-weight: 700; color: var(--accent); margin-right: 0.4rem; }
+      .pp .pptag { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); border: 1px solid var(--rule-h); border-radius: 4px; padding: 0.08em 0.4em; margin-left: 0.4rem; white-space: nowrap; }
+      .pp .ppq code, .ppsol code { font-family: var(--font-mono); font-size: 0.92em; color: var(--accent); }
+      .ppsol { margin-top: 0.5rem; border-top: 1px dotted var(--rule); padding-top: 0.45rem; }
+      .ppsol > summary { cursor: pointer; font-size: 0.78rem; font-weight: 600; color: var(--accent); list-style: none; display: inline-flex; align-items: center; gap: 0.35rem; }
+      .ppsol > summary::-webkit-details-marker { display: none; }
+      .ppsol > summary::before { content: '▸'; font-size: 0.72rem; transition: transform 0.15s ease; }
+      .ppsol[open] > summary::before { transform: rotate(90deg); }
+      .ppsol > summary:hover { text-decoration: underline; }
+      .ppsol .sol { margin-top: 0.45rem; font-size: 0.82rem; color: var(--ink-soft); line-height: 1.5; }
+      .ppsol .sol b { color: var(--ink); }
+      .ppsol .ans { margin-top: 0.45rem; padding: 0.4rem 0.6rem; border-left: 2px solid var(--accent); background: var(--accent-soft); border-radius: 0 5px 5px 0; font-size: 0.82rem; color: var(--ink-soft); }
+      .ppsol .ans b { color: var(--ink); }
 </style>
   </head>
   <body>
@@ -221,6 +239,7 @@
         <a href="#assessment">assessment</a>
         <a href="#program">program</a>
         <a href="#examples">worked examples</a>
+        <a href="#practice">practice</a>
         <a href="#glossary">key concepts</a>
         <a href="#bibliography">bibliography</a>
         <a href="./SYLLABUS.pdf" target="_blank">syllabus PDF</a>
@@ -915,6 +934,94 @@
             </tbody>
           </table></div>
           <p class="wnote"><b>How:</b> grand mean = 5; group means 2, 5, 8. SSTr = 3·[(2−5)² + (5−5)² + (8−5)²] = 3·18 = 54; SSE sums each group's {−1, 0, 1}² = 2 + 2 + 2 = 6. F = MSTr/MSE = 27/1 = 27, df = (2, 6) → p ≈ 0.001, so <b>reject H₀</b>: the means differ. (With k = 2 groups this reduces to F = t².)</p>
+        </div>
+      </section>
+
+      <!-- PRACTICE PROBLEMS -->
+      <section class="demo" id="practice">
+        <h2>Practice problems</h2>
+        <p class="cap">Six exam-style problems spanning the syllabus — work each one on paper (and in Python) first,
+          then open the solution to check every step. Where the worked examples above <em>demonstrate</em> a method,
+          these are yours to <em>practise</em>; the numbers all check out.</p>
+
+        <div class="pp">
+          <div class="ppq"><span class="qn">Q1</span>A population has μ = 50 and σ = 12. For a sample of <code>n = 36</code>, find <code>P(X̄ &lt; 47)</code>. <span class="pptag">sampling · CLT</span></div>
+          <details class="ppsol">
+            <summary>Show solution</summary>
+            <div class="sol">
+              By the CLT, X̄ is ≈ normal with mean 50 and <b>SE = σ/√n = 12/√36 = 2</b>.<br>
+              Standardize: <code>z = (47 − 50)/2 = −1.5</code>.<br>
+              <code>P(X̄ &lt; 47) = P(Z &lt; −1.5) = Φ(−1.5) = 0.0668</code>.
+            </div>
+            <div class="ans"><b>Answer:</b> <code>P(X̄ &lt; 47) ≈ 0.0668</code> — about 6.7% of samples of 36 have a mean below 47.</div>
+          </details>
+        </div>
+
+        <div class="pp">
+          <div class="ppq"><span class="qn">Q2</span>In a sample of <code>n = 200</code>, 50 are successes. Build a 95% confidence interval for the population proportion p. <span class="pptag">interval · proportion</span></div>
+          <details class="ppsol">
+            <summary>Show solution</summary>
+            <div class="sol">
+              Point estimate: <code>p̂ = 50/200 = 0.25</code>.<br>
+              Standard error: <code>√(p̂(1 − p̂)/n) = √(0.25·0.75/200) = 0.0306</code>.<br>
+              Margin (95%): <code>1.96 × 0.0306 = 0.060</code>.<br>
+              CI: <code>0.25 ± 0.060</code>.
+            </div>
+            <div class="ans"><b>Answer:</b> 95% CI = <code>(0.190, 0.310)</code>. Plausible values for p run from about 19% to 31%.</div>
+          </details>
+        </div>
+
+        <div class="pp">
+          <div class="ppq"><span class="qn">Q3</span>Test <code>H₀: μ = 500</code> vs <code>Hₐ: μ ≠ 500</code> with x̄ = 510, s = 20, n = 25, at α = 0.05. <span class="pptag">test · one-sample t</span></div>
+          <details class="ppsol">
+            <summary>Show solution</summary>
+            <div class="sol">
+              Test statistic: <code>t = (510 − 500)/(20/√25) = 10/4 = 2.5</code>, df = 24.<br>
+              Critical value: <code>t(0.025, 24) = 2.064</code>.<br>
+              Since <code>|2.5| &gt; 2.064</code>, reject H₀. Two-sided p-value ≈ 0.020.
+            </div>
+            <div class="ans"><b>Answer:</b> <code>t = 2.5 &gt; 2.064</code> (p ≈ 0.020) → <b>reject H₀</b>: evidence that μ ≠ 500.</div>
+          </details>
+        </div>
+
+        <div class="pp">
+          <div class="ppq"><span class="qn">Q4</span>Compare two independent groups: <code>x̄₁ = 85 (s₁ = 10, n₁ = 40)</code> and <code>x̄₂ = 80 (s₂ = 12, n₂ = 40)</code>. Is the difference significant at 5%? <span class="pptag">two-sample t</span></div>
+          <details class="ppsol">
+            <summary>Show solution</summary>
+            <div class="sol">
+              Standard error of the difference: <code>√(s₁²/n₁ + s₂²/n₂) = √(100/40 + 144/40) = √6.1 = 2.47</code>.<br>
+              Test statistic: <code>t = (85 − 80)/2.47 = 2.02</code>, with Welch df ≈ 76.<br>
+              Two-sided p-value ≈ 0.047 &lt; 0.05.
+            </div>
+            <div class="ans"><b>Answer:</b> <code>t ≈ 2.02</code>, p ≈ 0.047 → <b>reject H₀</b>: the means differ significantly (just barely) at the 5% level.</div>
+          </details>
+        </div>
+
+        <div class="pp">
+          <div class="ppq"><span class="qn">Q5</span>A die is rolled 60 times with observed counts 8, 12, 9, 11, 10, 10. Test whether the die is fair (α = 0.05). <span class="pptag">categorical · χ²</span></div>
+          <details class="ppsol">
+            <summary>Show solution</summary>
+            <div class="sol">
+              Under "fair", each face is expected <code>E = 60/6 = 10</code> times.<br>
+              <code>χ² = Σ(O − E)²/E = (4 + 4 + 1 + 1 + 0 + 0)/10 = 10/10 = 1.0</code>.<br>
+              Degrees of freedom = 6 − 1 = 5; critical value <code>χ²(0.05, 5) = 11.07</code>.<br>
+              Since <code>1.0 &lt; 11.07</code>, do not reject.
+            </div>
+            <div class="ans"><b>Answer:</b> <code>χ² = 1.0 &lt; 11.07</code> → <b>fail to reject</b>: no evidence the die is unfair.</div>
+          </details>
+        </div>
+
+        <div class="pp">
+          <div class="ppq"><span class="qn">Q6</span>A one-way ANOVA gives MSTr = 48 (df = 3) and MSE = 6 (df = 20). Compute F and decide at 5% (F-critical ≈ 3.10). <span class="pptag">ANOVA</span></div>
+          <details class="ppsol">
+            <summary>Show solution</summary>
+            <div class="sol">
+              The F statistic is the ratio of mean squares: <code>F = MSTr/MSE = 48/6 = 8.0</code>, with df = (3, 20).<br>
+              Compare to the critical value <code>F(0.05, 3, 20) = 3.10</code>.<br>
+              Since <code>8.0 &gt; 3.10</code>, reject the null of equal means.
+            </div>
+            <div class="ans"><b>Answer:</b> <code>F = 8.0 &gt; 3.10</code> → <b>reject H₀</b>: at least one group mean differs from the others.</div>
+          </details>
         </div>
       </section>
 
