@@ -184,7 +184,27 @@
         display: inline-block; margin-top: 0.25rem;
         border: 1px solid var(--rule); border-radius: 999px; padding: 0.05em 0.5em;
       }
-    </style>
+    
+      /* worked examples */
+      .wex { margin-top: 0.9rem; border: 1px solid var(--rule); border-radius: 8px; padding: 0.7rem 0.85rem; background: var(--bg); }
+      .wex:first-of-type { margin-top: 0.5rem; }
+      .wex .wtitle { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; font-size: 0.92rem; font-weight: 700; color: var(--ink); }
+      .wex .wtag { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: var(--accent); background: var(--accent-soft); padding: 0.12em 0.5em; border-radius: 4px; }
+      .wex .wprob { font-size: 0.84rem; color: var(--ink-soft); margin: 0.45rem 0 0; }
+      .wex .wprob code, .wtrace code, .wex .wnote code, .wtable code { font-family: var(--font-mono); font-size: 0.92em; color: var(--accent); }
+      .wtrace { list-style: none; margin: 0.55rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.3rem; counter-reset: step; }
+      .wtrace li { position: relative; padding-left: 1.7rem; font-size: 0.82rem; color: var(--ink-soft); font-family: var(--font-mono); line-height: 1.45; }
+      .wtrace li::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: 0.05rem; width: 1.15rem; text-align: center; font-size: 0.7rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border-radius: 4px; }
+      .wtrace li b { color: var(--ink); }
+      .wex .wnote { margin-top: 0.55rem; font-size: 0.8rem; color: var(--ink-soft); }
+      .wex .wnote b { color: var(--ink); }
+      .wtable-wrap { overflow-x: auto; }
+      .wtable { width: 100%; border-collapse: collapse; margin-top: 0.55rem; font-size: 0.78rem; }
+      .wtable th, .wtable td { border: 1px solid var(--rule); padding: 0.32em 0.55em; text-align: right; font-family: var(--font-mono); white-space: nowrap; }
+      .wtable th { background: var(--paper); color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; font-size: 0.68rem; }
+      .wtable td:first-child, .wtable th:first-child { text-align: left; color: var(--ink-soft); }
+      .wtable td.hot { color: var(--accent); font-weight: 700; }
+</style>
   </head>
   <body>
     <header>
@@ -200,6 +220,7 @@
         <a href="#method">methodology</a>
         <a href="#assessment">assessment</a>
         <a href="#program">program</a>
+        <a href="#examples">worked examples</a>
         <a href="#glossary">key concepts</a>
         <a href="#bibliography">bibliography</a>
         <a href="./SYLLABUS.pdf" target="_blank">syllabus PDF</a>
@@ -810,6 +831,93 @@
       </section>
 
       <!-- (e) KEY CONCEPTS GLOSSARY -->
+      <!-- WORKED EXAMPLES -->
+      <section class="demo" id="examples">
+        <h2>Worked examples</h2>
+        <p class="cap">Six problems worked end-to-end — one per stage of the inferential pipeline — so the formulas
+          above become procedures you can reproduce by hand or in Python on the problem sets and exams. Every step and
+          final number is shown; check them against the <a href="./index.html">interactive demos</a> and SciPy.</p>
+
+        <div class="wex">
+          <div class="wtitle"><span class="wtag">sampling · CLT</span> Probability for a sample mean</div>
+          <p class="wprob">A population has μ = 70 and σ = 10. For a random sample of <code>n = 25</code>, find <code>P(X̄ &gt; 73)</code>.</p>
+          <ol class="wtrace">
+            <li>By the CLT, X̄ is ≈ normal with mean μ = 70 and <b>SE = σ/√n = 10/√25 = 2</b>.</li>
+            <li>Standardize the cutoff: z = (73 − 70)/2 = <b>1.5</b>.</li>
+            <li>P(X̄ &gt; 73) = P(Z &gt; 1.5) = 1 − Φ(1.5).</li>
+            <li>From the standard-normal table, Φ(1.5) = 0.9332.</li>
+            <li><b>P(X̄ &gt; 73) = 1 − 0.9332 = 0.0668</b> — about 6.7% of samples.</li>
+          </ol>
+          <p class="wnote"><b>Takeaway:</b> the standard error shrinks like 1/√n. Quadrupling n to 100 halves SE to 1, making z = 3 and the probability ≈ 0.0013 — larger samples concentrate X̄ tightly around μ.</p>
+        </div>
+
+        <div class="wex">
+          <div class="wtitle"><span class="wtag">estimation · MLE</span> Maximum likelihood for an exponential rate</div>
+          <p class="wprob">An exponential(λ) sample has mean <code>x̄ = 5</code>. Find the MLE of λ.</p>
+          <ol class="wtrace">
+            <li>Likelihood: L(λ) = ∏ λe^(−λxᵢ) = λⁿ · e^(−λΣxᵢ).</li>
+            <li>Log-likelihood: ℓ(λ) = n·ln λ − λ·Σxᵢ.</li>
+            <li>Differentiate and set to zero: dℓ/dλ = n/λ − Σxᵢ = 0.</li>
+            <li>Solve: λ̂ = n/Σxᵢ = 1/x̄.</li>
+            <li>With x̄ = 5: <b>λ̂ = 1/5 = 0.20</b>.</li>
+          </ol>
+          <p class="wnote"><b>Takeaway:</b> the method of moments sets E[X] = 1/λ equal to x̄ and gives the same λ̂ = 1/x̄ — MoM and MLE coincide for the exponential, though in general MLE is the more efficient estimator.</p>
+        </div>
+
+        <div class="wex">
+          <div class="wtitle"><span class="wtag">interval</span> 95% confidence interval for a mean (σ unknown)</div>
+          <p class="wprob">A sample of <code>n = 16</code> has <code>x̄ = 50</code> and <code>s = 8</code>. Build a 95% CI for μ.</p>
+          <ol class="wtrace">
+            <li>σ unknown with a normal population → use the t distribution, df = n − 1 = 15.</li>
+            <li>Critical value: t(0.025, 15) = 2.131.</li>
+            <li>Standard error: s/√n = 8/√16 = 2.</li>
+            <li>Margin of error: 2.131 × 2 = 4.26.</li>
+            <li><b>CI = 50 ± 4.26 = (45.74, 54.26)</b>.</li>
+          </ol>
+          <p class="wnote"><b>Takeaway:</b> "95% confidence" describes the procedure — over many samples, 95% of the intervals it builds contain μ. A single computed interval either covers μ or does not.</p>
+        </div>
+
+        <div class="wex">
+          <div class="wtitle"><span class="wtag">test</span> One-sample t test</div>
+          <p class="wprob">Test <code>H₀: μ = 100</code> vs <code>Hₐ: μ ≠ 100</code> with x̄ = 104, s = 10, n = 25, at α = 0.05.</p>
+          <ol class="wtrace">
+            <li>Test statistic: t = (x̄ − μ₀)/(s/√n) = (104 − 100)/(10/5) = 4/2 = <b>2.0</b>, df = 24.</li>
+            <li>Critical value: t(0.025, 24) = 2.064.</li>
+            <li>|2.0| &lt; 2.064 → fail to reject H₀ at the 5% level.</li>
+            <li>Two-sided p-value = 2·P(T₂₄ &gt; 2.0) ≈ 0.057.</li>
+            <li><b>Conclusion: not enough evidence that μ ≠ 100</b> (a borderline result).</li>
+          </ol>
+          <p class="wnote"><b>Takeaway:</b> CI–test duality — μ₀ = 100 lies just inside the 95% CI 104 ± 2.064·2 = (99.87, 108.13), so the two-sided test does not reject. A one-sided test (Hₐ: μ &gt; 100) would reject, since its p ≈ 0.028.</p>
+        </div>
+
+        <div class="wex">
+          <div class="wtitle"><span class="wtag">two-sample</span> Difference of two proportions</div>
+          <p class="wprob">Group A: 60/100 successes (p̂₁ = 0.60); Group B: 50/100 (p̂₂ = 0.50). Test <code>H₀: p₁ = p₂</code>.</p>
+          <ol class="wtrace">
+            <li>Pooled proportion: p̂ = (60 + 50)/(100 + 100) = 0.55.</li>
+            <li>Standard error: √[p̂(1 − p̂)(1/n₁ + 1/n₂)] = √[0.55 · 0.45 · 0.02] = 0.0704.</li>
+            <li>Test statistic: z = (0.60 − 0.50)/0.0704 = 1.42.</li>
+            <li>Two-sided p-value = 2·P(Z &gt; 1.42) = 0.155.</li>
+            <li><b>p &gt; 0.05 → do not reject</b>: the 10-point gap is not significant at these sample sizes.</li>
+          </ol>
+          <p class="wnote"><b>Takeaway:</b> significance depends on n. The same 10-point gap with n = 400 per group gives z ≈ 2.84 (p ≈ 0.005) — the difference is then detectable.</p>
+        </div>
+
+        <div class="wex">
+          <div class="wtitle"><span class="wtag">ANOVA</span> One-way ANOVA table</div>
+          <p class="wprob">Three groups of 3: A = {1, 2, 3}, B = {4, 5, 6}, C = {7, 8, 9}. Test whether the means are equal.</p>
+          <div class="wtable-wrap"><table class="wtable">
+            <thead><tr><th>Source</th><th>SS</th><th>df</th><th>MS</th><th>F</th></tr></thead>
+            <tbody>
+              <tr><td>Between (treatment)</td><td>54</td><td>2</td><td>27</td><td class="hot">27</td></tr>
+              <tr><td>Within (error)</td><td>6</td><td>6</td><td>1</td><td>—</td></tr>
+              <tr><td>Total</td><td>60</td><td>8</td><td>—</td><td>—</td></tr>
+            </tbody>
+          </table></div>
+          <p class="wnote"><b>How:</b> grand mean = 5; group means 2, 5, 8. SSTr = 3·[(2−5)² + (5−5)² + (8−5)²] = 3·18 = 54; SSE sums each group's {−1, 0, 1}² = 2 + 2 + 2 = 6. F = MSTr/MSE = 27/1 = 27, df = (2, 6) → p ≈ 0.001, so <b>reject H₀</b>: the means differ. (With k = 2 groups this reduces to F = t².)</p>
+        </div>
+      </section>
+
       <section class="demo" id="glossary">
         <h2>Key concepts</h2>
         <p class="cap">A quick-reference glossary of the terms that recur throughout the program — useful when building
